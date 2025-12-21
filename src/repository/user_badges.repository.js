@@ -8,3 +8,12 @@ export const createStudentBadge = async (data) => {
   );
   return result.affectedRows;
 };
+
+//**update a badge to student */
+export const updateStudentBadge = async (data) => {
+  const result = await pool.query(
+    "UPDATE user_badges SET user_id = ?, badge_id = ?",
+    [data.user_id, data.badge_id]
+  );
+  return result.affectedRows;
+};
