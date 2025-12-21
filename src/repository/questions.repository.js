@@ -39,3 +39,12 @@ export const deleteQuestion = async (id) => {
   const result = await pool.query("DELETE FROM questions WHERE id = ? ", [id]);
   return result.affectedRows;
 };
+
+//**GET ALL QUESTION BELONGS TO A QUIZZ */
+export const quizzQuestions = async (quizz_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM questions WHERE quizz_id = ?",
+    [quizz_id]
+  );
+  return rows[0];
+};
