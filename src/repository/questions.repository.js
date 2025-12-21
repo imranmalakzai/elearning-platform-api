@@ -33,3 +33,9 @@ export const updateQuestion = async (data, id) => {
   );
   return result.affectedRows;
 };
+
+//**Delete a quizz question */
+export const deleteQuestion = async (id) => {
+  const result = await pool.query("DELETE FROM questions WHERE id = ? ", [id]);
+  return result.affectedRows;
+};
