@@ -79,6 +79,10 @@ export const userPoints = async (id) => {
 };
 
 //**update user role */
-export const changeRole = async (id,role) => {
-  const result = 
-}
+export const changeRole = async (id, role) => {
+  const result = pool.query("UPDATE users SET role = ? WHERE id = ? ", [
+    role,
+    id,
+  ]);
+  return result.affectedRows;
+};
