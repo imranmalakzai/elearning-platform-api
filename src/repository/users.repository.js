@@ -44,3 +44,12 @@ export const createUser = async (data) => {
   );
   return result.affectedRows;
 };
+
+//**update user profile by Id */
+export const updateUserProfile = async (data, id) => {
+  const result = await pool.query(
+    "UPDATE users SET name = ?, email = ? WHERE id = ?",
+    [data.name, data.email, id]
+  );
+  return result.affectedRows;
+};
