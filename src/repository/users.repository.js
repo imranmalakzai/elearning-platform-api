@@ -53,3 +53,12 @@ export const updateUserProfile = async (data, id) => {
   );
   return result.affectedRows;
 };
+
+//**Change user password */
+export const changePassword = async (id, password) => {
+  const result = await pool.query(
+    "UPDATE users set password = ? WHERE id = ?",
+    [password, id]
+  );
+  return result.affectedRows;
+};
