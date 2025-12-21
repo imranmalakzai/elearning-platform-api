@@ -21,3 +21,10 @@ export const deleteQuizz = async (id) => {
   const result = await pool.query("DELETE FROM quizzes WHERE id = ? ", [id]);
   return result.affectedRows;
 };
+//**Get All quizes for a course */
+export const courseQuizzes = async (course_id) => {
+  const [rows] = await pool.query("SELECT * FROM quizzes WHERE course_id = ?", [
+    id,
+  ]);
+  return rows;
+};
