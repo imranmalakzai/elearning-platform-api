@@ -25,3 +25,12 @@ export const deleteQuizeAttempts = async (id) => {
   ]);
   return result.affectedRows;
 };
+
+//**GET a user quize attempts  */
+export const userQuizAttempts = async (id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM quiz_attempts WHERE user_id = ?",
+    [id]
+  );
+  return rows;
+};
