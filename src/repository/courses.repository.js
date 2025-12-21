@@ -32,3 +32,9 @@ export const updateCouseDetails = async (id) => {
   );
   return result.affectedRows;
 };
+
+//**Delete course */
+export const deleteCourse = async (id) => {
+  const result = await pool.query("DELETE courses WHERE id = ? ", [id]);
+  return result.affectedRows;
+};
