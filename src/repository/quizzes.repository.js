@@ -8,3 +8,11 @@ export const createQuizz = async (data) => {
   );
   return result.affectedRows;
 };
+//**update quize */
+export const updateQuizz = async (id, data) => {
+  const result = await pool.query(
+    "UPDATE quizzes set course_id = ?, title = ? WHERE id = ?",
+    [data.course_id, data.title, id]
+  );
+  return result.affectedRows;
+};
