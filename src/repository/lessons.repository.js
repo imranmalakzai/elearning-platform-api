@@ -30,8 +30,17 @@ export const updateLessons = async (data, id) => {
   );
   return result.affectedRows;
 };
+
 //**Delete a course lessons */
 export const deleteLessons = async (id) => {
   const result = await pool.query("DELETE FROM lessons WHERE id = ?", [id]);
   return result.affectedRows;
+};
+
+//**Get all lessons belong to one course module */
+export const courseLessons = async (course_id) => {
+  const [rows] = await pool.query("SELECT * FROM lessons WHERE couse_id = ?", [
+    course_id,
+  ]);
+  return rows;
 };
