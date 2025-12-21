@@ -31,7 +31,15 @@ export const badges = async () => {
 };
 
 //**GET a badge by Id */
-export const badge = async (id) => {
+export const badgeById = async (id) => {
   const [rows] = await pool.query("SELECT * FROM badges WHERE id = ?", [id]);
+  return rows[0];
+};
+
+//**GET a badge by name */
+export const badgeByName = async (name) => {
+  const [rows] = await pool.query("SELECT * FROM badges WHERE name = ? ", [
+    name,
+  ]);
   return rows[0];
 };
