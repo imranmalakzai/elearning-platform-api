@@ -23,3 +23,9 @@ export const deleteBadge = async (id) => {
   const result = await pool.query("DELETE FROM badges WHERE id = ? ", [id]);
   return result.affectedRows;
 };
+
+//**Getl all Badgs */
+export const badges = async () => {
+  const [rows] = await pool.query("SELECT * FROM badges");
+  return rows;
+};
