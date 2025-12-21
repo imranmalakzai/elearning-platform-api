@@ -8,3 +8,9 @@ export const createCourse = async (data) => {
   );
   return result.affectedRows;
 };
+
+//**Get all courses */
+export const courses = async () => {
+  const [rows] = await pool.query("SELECT * FROM courses");
+  return rows;
+};
