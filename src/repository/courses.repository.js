@@ -1,4 +1,4 @@
-import pool from "../config/db.config";
+import pool from "../config/db.config.js";
 
 //**Create A new course */
 export const createCourse = async (data) => {
@@ -37,4 +37,10 @@ export const updateCouseDetails = async (id) => {
 export const deleteCourse = async (id) => {
   const result = await pool.query("DELETE courses WHERE id = ? ", [id]);
   return result.affectedRows;
+};
+
+//**GET A course By Id */
+export const getCourseById = async (id) => {
+  const [rows] = await pool.query("SELECT * FROM courses WHERE id = ?", [id]);
+  return rows[0];
 };
