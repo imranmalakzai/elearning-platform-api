@@ -21,6 +21,7 @@ export const instructorCourses = async (instructor_id) => {
     "SELECT * FROM courses WHERE instructor_id = ?",
     [instructor_id]
   );
+  return rows;
 };
 
 //**update a course details */
@@ -29,4 +30,5 @@ export const updateCouseDetails = async (id) => {
     "UPDATE courses SET title = ?, description = ? WHERE id = ?",
     [id]
   );
+  return result.affectedRows;
 };
