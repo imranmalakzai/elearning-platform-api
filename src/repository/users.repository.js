@@ -62,3 +62,12 @@ export const changePassword = async (id, password) => {
   );
   return result.affectedRows;
 };
+
+//**update user points */
+export const updatePoints = async (points, id) => {
+  const result = await pool.query("UPDATE users SET points = ? WHERE id = ?", [
+    points,
+    id,
+  ]);
+  return result.affectedRows;
+};
