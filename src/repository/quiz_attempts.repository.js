@@ -17,3 +17,11 @@ export const updateQuizeAttempts = async (data, id) => {
   );
   return result.affectedRows;
 };
+
+//**Delete a quize attempt by a student/user */
+export const deleteQuizeAttempts = async (id) => {
+  const result = await pool.query("DELETE FROM quiz_attempts WHERE id = ?", [
+    id,
+  ]);
+  return result.affectedRows;
+};
