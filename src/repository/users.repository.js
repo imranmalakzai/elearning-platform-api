@@ -1,4 +1,4 @@
-import pool from "../config/db.config";
+import pool from "../config/db.config.js";
 
 //**GET ALL USERS */
 export const getAllUsers = async () => {
@@ -25,11 +25,22 @@ export const getAllStudents = async () => {
   const [rows] = await pool.query("SELECT * FROM users WHERE role = ? ", [
     "student",
   ]);
+  return rows[0];
 };
 
-//**GET All Teachers  */
-export const getAllTeachers = async () => {
+//**GET All instructors  */
+export const getAllInstructors = async () => {
   const [rows] = await pool.query("SELECT * FROM users WHERE role = ? ", [
-    "student",
+    "instructor",
   ]);
+  return rows[0];
+};
+
+//**create user */
+export const createUser = async (data) => {
+  const result = await pool.query(
+    "INSERT INTO users (name,email,password,role) VALUES (?,?,?,?)",
+    [data.name, data.email, data.passord, data.role]
+  );
+  return result.affectedRows;
 };
