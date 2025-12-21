@@ -18,7 +18,16 @@ export const updateStudentBadge = async (data) => {
   return result.affectedRows;
 };
 
-//**delete a  student badge */
+//**delete a student badge */
 export const deleteStudentBadge = async (id) => {
   const result = await pool.query("DELETE FROM user_badges WHERE id", [id]);
+  return result.affectedRows;
+};
+
+//**GET all badges of a user */
+export const userBadges = async (id) => {
+  const [rows] = await pool.query("SELEC * user_badges WHERE user_id = ?", [
+    id,
+  ]);
+  return rows[0];
 };
