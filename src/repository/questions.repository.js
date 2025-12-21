@@ -46,5 +46,11 @@ export const quizzQuestions = async (quizz_id) => {
     "SELECT * FROM questions WHERE quizz_id = ?",
     [quizz_id]
   );
+  return rows;
+};
+
+//**GET A question by Id */
+export const quesion = async (id) => {
+  const [rows] = await pool.query("SELECT * FROM question WHERE id = ? ", [id]);
   return rows[0];
 };
