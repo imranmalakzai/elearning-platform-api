@@ -1,0 +1,18 @@
+import pool from "../config/db.config.js";
+
+//**create quesion for a quizz */
+export const createQuestion = async (data) => {
+  const result = await pool.query(
+    "INSERT INTO questions (quize_id,question,option_a,option_b,option_c,option_d,correct_option)",
+    [
+      data.quize_id,
+      data.question,
+      data.option_a,
+      data.option_b,
+      data.option_c,
+      data.option_d,
+      data.correct_option,
+    ]
+  );
+  return result.affectedRows;
+};
