@@ -17,3 +17,8 @@ export const updateStudentBadge = async (data) => {
   );
   return result.affectedRows;
 };
+
+//**delete a  student badge */
+export const deleteStudentBadge = async (id) => {
+  const result = await pool.query("DELETE FROM user_badges WHERE id", [id]);
+};
