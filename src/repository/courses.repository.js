@@ -22,3 +22,11 @@ export const instructorCourses = async (instructor_id) => {
     [instructor_id]
   );
 };
+
+//**update a course details */
+export const updateCouseDetails = async (id) => {
+  const result = await pool.query(
+    "UPDATE courses SET title = ?, description = ? WHERE id = ?",
+    [id]
+  );
+};
