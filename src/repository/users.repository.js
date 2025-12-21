@@ -71,3 +71,14 @@ export const updatePoints = async (points, id) => {
   ]);
   return result.affectedRows;
 };
+
+//**Get user points */
+export const userPoints = async (id) => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
+  return rows[0];
+};
+
+//**update user role */
+export const changeRole = async (id,role) => {
+  const result = 
+}
