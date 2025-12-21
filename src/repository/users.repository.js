@@ -86,3 +86,8 @@ export const changeRole = async (id, role) => {
   ]);
   return result.affectedRows;
 };
+//**Delete A user */
+export const deleteUser = async (id) => {
+  const result = pool.query("DELETE FROM users WHERE id = ?", [id]);
+  return result.affectedRows;
+};
