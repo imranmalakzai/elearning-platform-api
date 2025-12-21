@@ -16,3 +16,8 @@ export const updateQuizz = async (id, data) => {
   );
   return result.affectedRows;
 };
+//**Delete A queize */
+export const deleteQuizz = async (id) => {
+  const result = await pool.query("DELETE FROM quizzes WHERE id = ? ", [id]);
+  return result.affectedRows;
+};
