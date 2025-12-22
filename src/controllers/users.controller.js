@@ -5,6 +5,7 @@ import {
   createUser,
   getUserByEmail,
   getUserById,
+  updateUserProfile,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 import jwt from "jsonwebtoken";
@@ -46,4 +47,11 @@ export const login = asyncHandler(async (req, res) => {
 export const userProfile = asyncHandler(async (req, res) => {
   const user = await getUserById(req.user.id);
   res.status(200).json({ user });
+});
+
+//**Update user profile */
+export const updateProfile = asyncHandler(async (req, res) => {
+  const user = await updateUserProfile({ ...req.body }, req.user.id);
+  if (!user) throw new ApiError("unable to update the user profile");
+  res.status(200).json({ message: "profile updated successfully" });
 });
