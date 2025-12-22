@@ -17,3 +17,9 @@ export const updatePost = async (data, id) => {
   );
   return result.affectedRows;
 };
+
+//**Delete a forum post */
+export const deleteForumPost = async (id) => {
+  const result = await pool.query("DELETE FROM forum_posts WHERE id = ?", [id]);
+  return result.affectedRows;
+};
