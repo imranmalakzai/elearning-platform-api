@@ -5,10 +5,10 @@ import {
   createUser,
   getUserByEmail,
   getUserById,
+  deleteUser,
   updateUserProfile,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
-import jwt from "jsonwebtoken";
 
 //**Register new user */
 export const register = asyncHandler(async (req, res) => {
@@ -54,4 +54,11 @@ export const updateProfile = asyncHandler(async (req, res) => {
   const user = await updateUserProfile({ ...req.body }, req.user.id);
   if (!user) throw new ApiError("unable to update the user profile");
   res.status(200).json({ message: "profile updated successfully" });
+});
+
+//**Delete Acount profile *
+export const deleteAccount = asyncHandler(async (req, res) => {
+  const user = await deleteUser(req.user.id);
+  req.user.remove();
+  res.status(200).json({ message: "Account deleted successsfully" });
 });
