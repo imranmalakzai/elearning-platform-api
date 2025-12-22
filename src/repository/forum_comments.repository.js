@@ -17,3 +17,12 @@ export const updateComment = async (content, id) => {
   );
   return result.affectedRows;
 };
+
+//**delete a comment*/
+export const deleteACommnet = async (id) => {
+  const result = await pool.query(
+    "DELETE FROM forum_comments WHERE id = ? ",
+    id
+  );
+  return result.affectedRows;
+};
