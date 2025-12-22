@@ -8,3 +8,12 @@ export const trackProgress = async (student_id, lesson_id) => {
   );
   return result.affectedRows;
 };
+
+//**update lesson progress  */
+export const updateProgress = async (std_id, lesson_id, id) => {
+  const result = await pool.query(
+    "UPDATE lesson_progress set student_id = ?, lesson_id = ? WHERE id = ?",
+    [std_id, lesson_id, id]
+  );
+  return result.affectedRows;
+};
