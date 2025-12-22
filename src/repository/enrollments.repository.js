@@ -17,3 +17,9 @@ export const updateEnrollment = async (course_id, user_id, id) => {
   );
   return result.affectedRows;
 };
+
+//**Delete an Enrollmetns */
+export const deleteEnrollment = async (id) => {
+  const result = await pool.query("DELETE FROM enrollments WHERE id = ?", [id]);
+  return result.affectedRows;
+};
