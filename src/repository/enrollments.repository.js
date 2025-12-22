@@ -23,3 +23,12 @@ export const deleteEnrollment = async (id) => {
   const result = await pool.query("DELETE FROM enrollments WHERE id = ?", [id]);
   return result.affectedRows;
 };
+
+//**Get all users Enrolled in a course */
+export const courseEnrolledUsers = async (course_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM enrollment WHERE course_id = ?",
+    [course_id]
+  );
+  return rows;
+};
