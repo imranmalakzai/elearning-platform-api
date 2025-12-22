@@ -32,3 +32,12 @@ export const courseEnrolledUsers = async (course_id) => {
   );
   return rows;
 };
+
+//**GET a users all enrolled courses */
+export const userEnrolledCourses = async (user_id) => {
+  const [rows] = await pool.query(
+    "SELEDCT * FROM enrollments WHERE user_id = ?",
+    [user_id]
+  );
+  return rows.affectedRows;
+};
