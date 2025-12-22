@@ -60,5 +60,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
 export const deleteAccount = asyncHandler(async (req, res) => {
   const user = await deleteUser(req.user.id);
   req.user.remove();
+  if (!user) throw new ApiError("unable to delete account", 400);
   res.status(200).json({ message: "Account deleted successsfully" });
 });
