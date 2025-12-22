@@ -17,3 +17,11 @@ export const updateProgress = async (std_id, lesson_id, id) => {
   );
   return result.affectedRows;
 };
+
+//**Delelte lesson progress  */
+export const deleteProgress = async (id) => {
+  const result = await pool.query("DELETE FROM lesson_progress WHERE id = ?", [
+    id,
+  ]);
+  return result.affectedRows;
+};
