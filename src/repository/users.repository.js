@@ -39,8 +39,8 @@ export const getAllInstructors = async () => {
 //**create user */
 export const createUser = async (data) => {
   const result = await pool.query(
-    "INSERT INTO users (name,email,password,role) VALUES (?,?,?,?)",
-    [data.name, data.email, data.passord, data.role]
+    "INSERT INTO users (name,email,password) VALUES (?,?,?)",
+    [data.name, data.email, data.passord]
   );
   return result.affectedRows;
 };
