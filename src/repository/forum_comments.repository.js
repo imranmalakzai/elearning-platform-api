@@ -26,3 +26,12 @@ export const deleteACommnet = async (id) => {
   );
   return result.affectedRows;
 };
+
+//**GET ALL COMMENTS TO A POST */
+export const comments = async (post_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM forum_comments WHERE post_id = ?",
+    [post_id]
+  );
+  return rows;
+};
