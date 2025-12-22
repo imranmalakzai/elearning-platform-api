@@ -25,3 +25,12 @@ export const deleteProgress = async (id) => {
   ]);
   return result.affectedRows;
 };
+
+//**Get a user all lessons progress */
+export const userProgress = async (student_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM lesson_progress WHERE student_id = ?",
+    [student_id]
+  );
+  return rows;
+};
