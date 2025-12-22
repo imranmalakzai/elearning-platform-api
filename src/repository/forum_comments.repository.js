@@ -8,3 +8,12 @@ export const createComment = async (data) => {
   );
   return result.affectedRows;
 };
+
+//**update a comment */
+export const updateComment = async (content, id) => {
+  const result = await pool.query(
+    "UPDATE forum_comments SET content = ? WHERE id = ?",
+    [content, id]
+  );
+  return result.affectedRows;
+};
