@@ -23,3 +23,11 @@ export const deleteForumPost = async (id) => {
   const result = await pool.query("DELETE FROM forum_posts WHERE id = ?", [id]);
   return result.affectedRows;
 };
+
+//**get  forum post by Id */
+export const formPost = async (id) => {
+  const [rows] = await pool.query("SELECT * FROM forum_posts WHERE id = ?", [
+    id,
+  ]);
+  return rows[0];
+};
