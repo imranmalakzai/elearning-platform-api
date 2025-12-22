@@ -1,7 +1,11 @@
 import ApiError from "../utils/api_error.js";
 import asyncHandler from "../utils/async_handler.js";
 import bcrypt from "bcrypt";
-import { createUser, getUserByEmail } from "../repository/users.repository.js";
+import {
+  createUser,
+  getUserByEmail,
+  getUserById,
+} from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 import jwt from "jsonwebtoken";
 
@@ -36,4 +40,10 @@ export const login = asyncHandler(async (req, res) => {
   }
   const token = await generateToken(user);
   res.status(200).json({ token, user });
+});
+
+//**GET LoggedIn USER PROFILE */
+export const userProfile = asyncHandler(async (req, res) => {
+  const user = await getUserById(req.user.id);
+  res.status(200).json({ user });
 });
