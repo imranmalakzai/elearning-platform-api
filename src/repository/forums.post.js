@@ -31,6 +31,7 @@ export const formPost = async (id) => {
   ]);
   return rows[0];
 };
+
 //**GET A COURSE POSTS */
 export const coursePosts = async (course_id) => {
   const [rows] = await pool.query(
