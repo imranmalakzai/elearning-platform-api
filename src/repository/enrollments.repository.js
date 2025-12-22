@@ -8,3 +8,12 @@ export const createEnrollment = async (course_id, user_id) => {
   );
   return result.affectedRows;
 };
+
+//** update on Enrollment */
+export const updateEnrollment = async (course_id, user_id, id) => {
+  const result = await pool.query(
+    "UPDATE enrollments SET course_id = ?,user_id = ? WHERE id = ?",
+    [course_id, user_id, id]
+  );
+  return result.affectedRows;
+};
