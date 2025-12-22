@@ -34,3 +34,5 @@ export const userProgress = async (student_id) => {
   );
   return rows;
 };
+
+//**GET CURRENT LESSON PROGRESS */
