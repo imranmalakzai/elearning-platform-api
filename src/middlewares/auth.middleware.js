@@ -8,7 +8,7 @@ export const protect = async (req, res, next) => {
     throw new ApiError("please authenticate", 401);
   }
   const token = header.split(" ")[1];
-  const decode = await jwt.verify(token, JWT_SECRET);
+  const decode = jwt.verify(token, JWT_SECRET);
   if (!decode) throw new ApiError("Invalid token", 401);
   req.token = token;
   req.user = decode;
