@@ -56,7 +56,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "profile updated successfully" });
 });
 
-//**Delete Acount profile *
+//**Delete Account profile */
 export const deleteAccount = asyncHandler(async (req, res) => {
   const user = await deleteUser(req.user.id);
   req.user.remove();
