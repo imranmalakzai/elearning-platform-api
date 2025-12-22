@@ -36,3 +36,10 @@ export const userProgress = async (student_id) => {
 };
 
 //**GET CURRENT LESSON PROGRESS */
+export const currentLessonProgress = async (id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM lesson_progress WHERE id = ?",
+    [id]
+  );
+  return rows[0];
+};
