@@ -5,6 +5,7 @@ import {
   createLessons,
   updateLessons,
   getLessonById,
+  deleteLessons,
 } from "../repository/lessons.repository.js";
 
 //**create a lesson for a course (Instructor only) */
@@ -60,4 +61,24 @@ export const updateLesson = asyncHandler(async (req, res) => {
   });
   if (!result) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "lesson updated successfully" });
+});
+
+//**Delete lesson (Instructor only) */
+export const deleteLesson = asyncHandler(async (req, res) => {
+  const { course_id, lesson_id } = req.params;
+
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //ensure course belongs to the user
+  if (course.instructor_id.toString() !== req.user.id.toString()) {
+    throw new ApiError("unauthorize", 403);
+  }
+
+  const lesson = await getLessonById(lesson_id);
+  if (!lesson) throw new ApiError("Lesson not exist", 404);
+
+  const result = await deleteLessons(lesson_id);
+  if (!result) throw new ApiError("internal server error ", 500);
+  res.status(200).json({ message: "Lesson deleted successfully" });
 });
