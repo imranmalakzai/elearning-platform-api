@@ -5,6 +5,7 @@ import {
   createEnrollment,
   isEnrolled,
   deleteEnrollment,
+  courseEnrolledUsers,
 } from "../repository/enrollments.repository.js";
 
 //**Enrolled to a course (student only) */
@@ -37,4 +38,13 @@ export const cancellEnrollment = asyncHandler(async (req, res) => {
   if (!result) throw new ApiError("Internal server error", 500);
 
   res.status(204).json({ message: "enrollment cancelled successfully" });
+});
+
+//**Get all students Enrolled to  a course (Instructor only) */
+export const courseStudents = asyncHandler(async (req, res) => {
+  const { course_id } = req.params;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+  const users = await courseEnrolledUsers(course_id);
+  res.status(200).json({ users });
 });
