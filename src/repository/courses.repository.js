@@ -35,11 +35,10 @@ export const updateCouseDetails = async (id) => {
 };
 
 //**Delete course */
-export const deleteCourse = async (instructor_id, id) => {
-  const result = await pool.query(
-    "DELETE FROM  courses WHERE instructor_id = ? AND  id = ? ",
-    [instructor_id, id]
-  );
+export const deleteCourse = async (course_id) => {
+  const result = await pool.query("DELETE FROM  courses WHERE id = ? ", [
+    course_id,
+  ]);
   return result.affectedRows;
 };
 

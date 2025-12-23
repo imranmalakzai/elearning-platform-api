@@ -24,9 +24,16 @@ export const createCourseController = asyncHandler(async (req, res) => {
 
 //**Delete a course (Instructor only) */
 export const deleteCourseController = asyncHandler(async (req, res) => {
-  const isExist = await instructorcourse(req.user.id, req.params.id);
-  if (isExist) throw new ApiError("course not exist", 404);
-  const result = await deleteCourse(req.user.id, req.params.id);
+  const { course_id } = req.params;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //ensure course belongs to creater
+  if (course.instructor_id.toString() !== req.user.id.toString()) {
+    throw new ApiError("unauthorized", 403);
+  }
+
+  const result = await deleteCourse(course_id);
   if (!result) throw new ApiError("internal server error", 500);
   res.status(400).json({ message: "course deleted successfully" });
 });
