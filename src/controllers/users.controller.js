@@ -7,6 +7,7 @@ import {
   getUserById,
   deleteUser,
   updateUserProfile,
+  changePassword,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 
@@ -62,4 +63,23 @@ export const deleteAccount = asyncHandler(async (req, res) => {
   req.user.remove();
   if (!user) throw new ApiError("unable to delete account", 400);
   res.status(200).json({ message: "Account deleted successsfully" });
+});
+
+//** Change password */
+export const changePasswordController = asyncHandler(async (req, res) => {
+  const { oldPassword, newpassword } = req.body;
+  if (!oldPassword || !newpassword) {
+    throw new ApiError("old passowrd and new passward is required", 409);
+  }
+  const user = await getUserById(req.user.id);
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    throw new ApiError("Invalid old password", 409);
+  }
+  const passward = await bcrypt.hash(newpassword, 10);
+  const update = await changePassword(user.id, passward);
+  if (!update) {
+    throw new ApiError("unable to update password");
+  }
+  res.status(200).json({ message: "password updated successfully" });
 });
