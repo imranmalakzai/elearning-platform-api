@@ -92,3 +92,13 @@ export const courseLessons = asyncHandler(async (req, res) => {
   const lessons = await getCourseLessons(course_id);
   res.status(200).json({ lessons, success: true });
 });
+
+//**Get lesson by Id */
+export const getLesson = asyncHandler(async (req, res) => {
+  const { course_id, lesson_id } = req.params;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("Lesson not exist", 404);
+  const lesson = await getLessonById(lesson_id);
+  if (!lesson) throw new ApiError("Lesson not exist", 404);
+  res.status(200).json({ lesson });
+});
