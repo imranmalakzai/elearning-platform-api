@@ -1,3 +1,4 @@
+import { id } from "zod/locales";
 import pool from "../config/db.config.js";
 
 //**Create A new course */
@@ -34,8 +35,11 @@ export const updateCouseDetails = async (id) => {
 };
 
 //**Delete course */
-export const deleteCourse = async (id) => {
-  const result = await pool.query("DELETE courses WHERE id = ? ", [id]);
+export const deleteCourse = async (instructor_id, id) => {
+  const result = await pool.query(
+    "DELETE FROM  courses WHERE instructor_id = ? AND  id = ? ",
+    [instructor_id, id]
+  );
   return result.affectedRows;
 };
 
@@ -43,4 +47,13 @@ export const deleteCourse = async (id) => {
 export const getCourseById = async (id) => {
   const [rows] = await pool.query("SELECT * FROM courses WHERE id = ?", [id]);
   return rows[0];
+};
+
+//**Get An instructor course */
+export const instructorcourse = async (instructor_id, id) => {
+  const result = await pool.query(
+    "SELECT * FROM courses WHERE instructor_id = ? AND id = ?",
+    [instructor_id, id]
+  );
+  return result.affectedRows;
 };
