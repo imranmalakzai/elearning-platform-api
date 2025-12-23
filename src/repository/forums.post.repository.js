@@ -10,10 +10,10 @@ export const createPost = async (data) => {
 };
 
 //**update a forum post */
-export const updatePost = async (data, id) => {
+export const updatePost = async (content, id) => {
   const result = await pool.query(
-    "UPDATE forum_posts SET course_id = ?, user_id = ?, content = ? WHERE id = ?",
-    [data.course_id, data.user_id, data.content, id]
+    "UPDATE forum_posts SET , content = ? WHERE id = ?",
+    [content, id]
   );
   return result.affectedRows;
 };
@@ -39,4 +39,12 @@ export const coursePosts = async (course_id) => {
     [course_id]
   );
   return rows;
+};
+
+//**Get a user post by Id */
+export const userPost = async (post_id) => {
+  const [rows] = await pool.query("SELECT * FROM forum_posts WHERE  id = ?", [
+    post_id,
+  ]);
+  return rows[0];
 };
