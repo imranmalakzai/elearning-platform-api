@@ -9,6 +9,7 @@ import {
   deleteUser,
   updateUserProfile,
   changePassword,
+  getAllStudents,
   changeRole,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
@@ -93,4 +94,10 @@ export const changeRoleController = asyncHandler(async (req, res) => {
   const update = await changeRole(user.id, role);
   if (!update) throw new ApiError("unable to update role", 500);
   res.status(204).json({ message: "user role update successfully" });
+});
+
+//**Get all students (admin only) */
+export const studentsController = asyncHandler(async (req, res) => {
+  const users = await getAllStudents();
+  res.status(200).json({ users });
 });
