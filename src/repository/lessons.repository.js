@@ -38,7 +38,7 @@ export const deleteLessons = async (id) => {
 };
 
 //**Get all lessons belong to one course module */
-export const courseLessons = async (course_id) => {
+export const getCourseLessons = async (course_id) => {
   const [rows] = await pool.query("SELECT * FROM lessons WHERE course_id = ?", [
     course_id,
   ]);

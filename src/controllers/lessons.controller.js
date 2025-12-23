@@ -5,6 +5,7 @@ import {
   createLessons,
   updateLessons,
   getLessonById,
+  getCourseLessons,
   deleteLessons,
 } from "../repository/lessons.repository.js";
 
@@ -81,4 +82,13 @@ export const deleteLesson = asyncHandler(async (req, res) => {
   const result = await deleteLessons(lesson_id);
   if (!result) throw new ApiError("internal server error ", 500);
   res.status(200).json({ message: "Lesson deleted successfully" });
+});
+
+//**Get course All  lessons */
+export const courseLessons = asyncHandler(async (req, res) => {
+  const { course_id } = req.params;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+  const lessons = await getCourseLessons(course_id);
+  res.status(200).json({ lessons, success: true });
 });
