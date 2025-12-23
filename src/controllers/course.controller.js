@@ -4,6 +4,7 @@ import {
   createCourse,
   instructorcourse,
   deleteCourse,
+  courses,
 } from "../repository/courses.repository.js";
 
 //**create A course (Instructor only) */
@@ -20,11 +21,17 @@ export const createCourseController = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "course created successfully" });
 });
 
-//**Delete a course Instructor only */
+//**Delete a course (Instructor only) */
 export const deleteCourseController = asyncHandler(async (req, res) => {
   const isExist = await instructorcourse(req.user.id, req.params.id);
   if (isExist) throw new ApiError("course not exist", 404);
   const result = await deleteCourse(req.user.id, req.params.id);
   if (!result) throw new ApiError("internal server error", 500);
   res.status(400).json({ message: "course deleted successfully" });
+});
+
+//**GET ALL COURSES */
+export const coursesController = asyncHandler(async (req, res) => {
+  const course = await courses();
+  res.status(200).json({ courses: course });
 });
