@@ -1,6 +1,7 @@
 import ApiError from "../utils/api_error.js";
 import asyncHandler from "../utils/async_handler.js";
 import bcrypt from "bcrypt";
+import { Roles } from "../utils/role.js";
 import {
   createUser,
   getUserByEmail,
@@ -8,6 +9,7 @@ import {
   deleteUser,
   updateUserProfile,
   changePassword,
+  changeRole,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 
@@ -68,18 +70,27 @@ export const deleteAccount = asyncHandler(async (req, res) => {
 //** Change password */
 export const changePasswordController = asyncHandler(async (req, res) => {
   const { oldPassword, newpassword } = req.body;
-  if (!oldPassword || !newpassword) {
+  if (!oldPassword || !newpassword)
     throw new ApiError("old passowrd and new passward is required", 409);
-  }
+
   const user = await getUserById(req.user.id);
   const isMatch = await bcrypt.compare(oldPassword, user.password);
-  if (!isMatch) {
-    throw new ApiError("Invalid old password", 409);
-  }
+  if (!isMatch) throw new ApiError("Invalid old password", 409);
+
   const passward = await bcrypt.hash(newpassword, 10);
   const update = await changePassword(user.id, passward);
-  if (!update) {
-    throw new ApiError("unable to update password");
-  }
+  if (!update) throw new ApiError("unable to update password");
+
   res.status(200).json({ message: "password updated successfully" });
+});
+
+//**Change user role controller (Admin only) */
+export const changeRoleController = asyncHandler(async (req, res) => {
+  const role = req.body.role;
+  if (!Roles.includes(role)) throw new ApiError("Invalid Role", 400);
+  const user = await getUserById(req.params.id);
+  if (!user) throw new ApiError("Invalid user id", 400);
+  const update = await changeRole(user.id, role);
+  if (!update) throw new ApiError("unable to update role", 500);
+  res.status(204).json({ message: "user role update successfully" });
 });
