@@ -26,10 +26,10 @@ export const instructorCourses = async (instructor_id) => {
 };
 
 //**update a course details */
-export const updateCouseDetails = async (id) => {
+export const updateCouseDetails = async (data, id) => {
   const result = await pool.query(
     "UPDATE courses SET title = ?, description = ? WHERE id = ?",
-    [id]
+    [data.title, data.description, id]
   );
   return result.affectedRows;
 };

@@ -2,10 +2,10 @@ import asyncHandler from "../utils/async_handler.js";
 import ApiError from "../utils/api_error.js";
 import {
   createCourse,
-  instructorcourse,
   deleteCourse,
   courses,
   getCourseById,
+  updateCouseDetails,
 } from "../repository/courses.repository.js";
 
 //**create A course (Instructor only) */
@@ -20,6 +20,25 @@ export const createCourseController = asyncHandler(async (req, res) => {
   });
   if (!course) throw new ApiError("internal server error", 500);
   res.status(201).json({ message: "course created successfully" });
+});
+
+//**update a course (Instructor only) */
+export const updateCourse = asyncHandler(async (req, res) => {
+  const { course_id } = req.params;
+  const { title, description } = req.body;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //ensure course belong to the user
+  if (course.instructor_id.toString() !== req.user.id) {
+    throw new ApiError("unauthroized", 404);
+  }
+  if (!title || !description) {
+    throw new ApiError("title and description is requried", 409);
+  }
+  const result = await updateCouseDetails({ title, description }, course_id);
+  if (!result) throw new ApiError("Internal server error", 500);
+  res.status(204).json({ message: "course updated successfully" });
 });
 
 //**Delete a course (Instructor only) */
@@ -45,7 +64,7 @@ export const coursesController = asyncHandler(async (req, res) => {
 });
 
 //**Get a course by Id */
-export const courseController = asyncHandler(async (req, res) => {
+export const getCourse = asyncHandler(async (req, res) => {
   const course = await getCourseById(req.params.id);
   if (!course) throw new ApiError("course not exist by this id ", 404);
   res.status(200).json({ course });
