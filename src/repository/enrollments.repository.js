@@ -33,6 +33,15 @@ export const courseEnrolledUsers = async (course_id) => {
   return rows;
 };
 
+//**check user enrolled to a course or not */
+export const isEnrolled = async (course_id, user_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM enrollments WHERE course_id = ? AND user_id = ?",
+    [course_id, user_id]
+  );
+  return rows[0];
+};
+
 //**GET a users all enrolled courses */
 export const userEnrolledCourses = async (user_id) => {
   const [rows] = await pool.query(
