@@ -5,6 +5,7 @@ import {
   instructorcourse,
   deleteCourse,
   courses,
+  getCourseById,
 } from "../repository/courses.repository.js";
 
 //**create A course (Instructor only) */
@@ -34,4 +35,11 @@ export const deleteCourseController = asyncHandler(async (req, res) => {
 export const coursesController = asyncHandler(async (req, res) => {
   const course = await courses();
   res.status(200).json({ courses: course });
+});
+
+//**Get a course by Id */
+export const courseController = asyncHandler(async (req, res) => {
+  const course = await getCourseById(req.params.id);
+  if (!course) throw new ApiError("course not exist by this id ", 404);
+  res.status(200).json({ course });
 });
