@@ -6,6 +6,7 @@ import {
   createPost,
   userPost,
   updatePost,
+  deleteForumPost,
 } from "../repository/forums.post.repository.js";
 
 //**create a post (Instroucter,enrolled student) only */
@@ -52,4 +53,28 @@ export const updateForumPost = asyncHandler(async (req, res) => {
   const result = await updatePost(content, post_id);
   if (!result) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "post updated successfully" });
+});
+
+//**Delete a post  */
+export const deletePost = asyncHandler(async (req, res) => {
+  const { course_id, post_id } = req.params;
+
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("post not exist", 404);
+
+  const user = isEnrolled(course_id, req.user.id);
+  if (!user) throw new ApiError("unauthorized", 403);
+
+  const post = await userPost(post_id);
+  if (!post) throw new ApiError("post not exist", 404);
+
+  //ensure creater of the post
+  if (post.user_id.toString() !== req.user.id.toString()) {
+    throw new ApiError("unauthorized", 403);
+  }
+
+  const result = await deleteForumPost(post_id);
+  if (!result) throw new ApiError("internal server error", 500);
+
+  res.status(204).json({ message: "Record delete successfully" });
 });
