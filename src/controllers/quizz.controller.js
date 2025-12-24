@@ -4,6 +4,7 @@ import { getCourseById } from "../repository/courses.repository.js";
 import {
   createQuizz as createQuizzRepo,
   updateQuizz as updateQuizzRepo,
+  deleteQuizz as deleteQuizzRepo,
   getQuizeById,
 } from "../repository/quizzes.repository.js";
 
@@ -54,5 +55,26 @@ export const updateQuizz = asyncHandler(async (req, res) => {
   const update = await updateQuizzRepo(quizz_id, { title, course_id });
   if (!update) throw new ApiError("Internal server error ", 500);
 
-  res.status(200).json("quizz updated successfully");
+  res.status(200).json({ message: "quizz update successfully" });
+});
+
+//**Delete quizz (instrutor only) */
+export const delteQuizz = asyncHandler(async (req, res) => {
+  const { course_id, quizz_id } = req.params;
+
+  //course exist ?
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist");
+
+  //is owner of the course
+  const owner = course.instructor_id.toString() === req.user.id.toString();
+  if (!owner) throw new ApiError("Access denied", 403);
+
+  //is quizz exist
+  const quize = await getQuizeById(quizz_id);
+  if (!quize) throw new ApiError("quiz not exit", 404);
+
+  const result = await deleteQuizzRepo(quizz_id);
+  if (!result) throw new ApiError("Internal server error", 500);
+  res.status(200).json({ message: "quizz deleted successfully" });
 });
