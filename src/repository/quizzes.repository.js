@@ -36,3 +36,12 @@ export const getQuizeById = async (quiz_id) => {
   ]);
   return rows[0];
 };
+
+//**Get quizz by Id Belongs to a course */
+export const quizBelongToCourse = async (course_id, quiz_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM quizzes WHERE course_id = ? AND  id = ?",
+    [course_id, quiz_id]
+  );
+  return rows[0];
+};
