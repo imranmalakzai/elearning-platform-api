@@ -110,16 +110,41 @@ export const forumPostComments = asycHandler(async (req, res) => {
   const course = await getCourseById(course_id);
   if (!course) throw new ApiError("course not exist", 404);
 
-  //post exist
-  const post = await getPostById(post_id);
-  if (!post) throw new ApiError("post not exist", 404);
-
   //is enrolled || instructor
   const student = await isEnrolled(course_id, req.user.id);
   const instructor = course.instructor_id.toString() === req.user.id;
 
   if (!student && !instructor) throw new ApiError("please enrolled first", 403);
 
+  //post exist
+  const post = await getPostById(post_id);
+  if (!post) throw new ApiError("post not exist", 404);
+
   const comments = await postComments(post_id);
   res.status(200).json({ comments: comments || [] });
+});
+
+//**Get a comment by Id */
+export const getCommentById = asycHandler(async (req, res) => {
+  const { course_id, post_id, comment_id } = req.params;
+
+  //course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //check enromments
+  const user = await isEnrolled(course_id, req.user.id);
+  const instructor = course.instructor_id.toString() === req.user.id.toString();
+
+  if (!user && !instructor) throw new ApiError("access denied", 403);
+
+  //post exist
+  const post = await getPostById(post_id);
+  if (!post) throw new ApiError("post not exist", 404);
+
+  //comment exist
+  const comment = await getcommentById(comment_id);
+  if (!comment) throw new ApiError("comment not exist");
+
+  res.status(200).json({ comment });
 });
