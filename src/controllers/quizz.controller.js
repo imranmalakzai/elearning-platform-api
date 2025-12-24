@@ -1,6 +1,7 @@
 import asyncHandler from "../utils/async_handler.js";
 import ApiError from "../utils/api_error.js";
 import { getCourseById } from "../repository/courses.repository.js";
+import { isEnrolled } from "../repository/enrollments.repository.js";
 import {
   createQuizz as createQuizzRepo,
   updateQuizz as updateQuizzRepo,
@@ -77,4 +78,24 @@ export const delteQuizz = asyncHandler(async (req, res) => {
   const result = await deleteQuizzRepo(quizz_id);
   if (!result) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "quizz deleted successfully" });
+});
+
+//**Get all quizzes belongs to a course (enrolled student & instructor only) */
+export const quizzes = asyncHandler(async (req, res) => {
+  const { course_id } = req.params;
+
+  //check if course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //check is ownered
+  const owner = course.instructor_id.toString() === req.user.id.toString();
+  //is enrolled student
+  const student = await isEnrolled(course_id, req.user.id);
+  if (!owner && !student) throw new ApiError("please enroll first", 403);
+
+  //quizzes
+  const quizzes = await courseQuizzes(course_id);
+
+  res.status(200).json({ quizzes: quizzes || [] });
 });
