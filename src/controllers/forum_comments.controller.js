@@ -6,6 +6,7 @@ import { isEnrolled } from "../repository/enrollments.repository.js";
 import {
   createComment,
   getcommentById,
+  deleteACommnet,
   updateComment,
 } from "../repository/forum_comments.repository.js";
 
@@ -69,4 +70,30 @@ export const editComment = asycHandler(async (req, res) => {
   if (!update) throw new ApiError("Internal server error", 500);
 
   res.status(200).json({ message: "comment updated successfully" });
+});
+
+//**Delete comment (Owner,post Owner)  only*/
+export const deleteComment = asycHandler(async (req, res) => {
+  const { course_id, post_id, comment_id } = req.params;
+
+  //course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //post exist
+  const post = await getPostById(post_id);
+  if (!post) throw new ApiError("post not exist", 404);
+
+  //comment exist
+  const comment = await getcommentById(comment_id);
+  if (!comment) throw new ApiError("comment not exist", 404);
+
+  //is commenter ?
+  if (comment.user_id.toString() !== req.user.id) {
+    throw new ApiError("Access denied", 403);
+  }
+
+  //delete post
+  const result = await deleteACommnet(comment_id);
+  if (!result) throw new ApiError("Internal server error", 500);
 });
