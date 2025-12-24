@@ -28,3 +28,11 @@ export const courseQuizzes = async (course_id) => {
   ]);
   return rows;
 };
+
+//**Get Quizz by Id */
+export const getQuizeById = async (quiz_id) => {
+  const [rows] = await pool.query("SELECT * FROM quizzes WHERE id = ?", [
+    quiz_id,
+  ]);
+  return rows[0];
+};
