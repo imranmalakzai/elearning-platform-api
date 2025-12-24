@@ -88,8 +88,11 @@ export const deleteComment = asycHandler(async (req, res) => {
   const comment = await getcommentById(comment_id);
   if (!comment) throw new ApiError("comment not exist", 404);
 
-  //is commenter ?
-  if (comment.user_id.toString() !== req.user.id) {
+  //check owner ships ?
+  const commentOwner = comment.user_id.toString() === req.user.id.toString();
+  const postOwner = post.user_id.toString() === req.user.id.toString();
+
+  if (!commentOwner && !postOwner) {
     throw new ApiError("Access denied", 403);
   }
 
