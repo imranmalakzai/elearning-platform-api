@@ -8,6 +8,7 @@ import {
   getcommentById,
   deleteACommnet,
   updateComment,
+  comments as postComments,
 } from "../repository/forum_comments.repository.js";
 
 //** post a comment to a course forum post */
@@ -99,4 +100,26 @@ export const deleteComment = asycHandler(async (req, res) => {
   //delete post
   const result = await deleteACommnet(comment_id);
   if (!result) throw new ApiError("Internal server error", 500);
+});
+
+//**Get all comments of A post (instructor,enrolled students only) */
+export const forumPostComments = asycHandler(async (req, res) => {
+  const { course_id, post_id } = req.params;
+
+  //course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //post exist
+  const post = await getPostById(post_id);
+  if (!post) throw new ApiError("post not exist", 404);
+
+  //is enrolled || instructor
+  const student = await isEnrolled(course_id, req.user.id);
+  const instructor = course.instructor_id.toString() === req.user.id;
+
+  if (!student && !instructor) throw new ApiError("please enrolled first", 403);
+
+  const comments = await postComments(post_id);
+  res.status(200).json({ comments: comments || [] });
 });
