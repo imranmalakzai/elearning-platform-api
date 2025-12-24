@@ -25,7 +25,7 @@ export const deleteForumPost = async (id) => {
 };
 
 //**get  forum post by Id */
-export const formPost = async (id) => {
+export const getPostById = async (id) => {
   const [rows] = await pool.query("SELECT * FROM forum_posts WHERE id = ?", [
     id,
   ]);
