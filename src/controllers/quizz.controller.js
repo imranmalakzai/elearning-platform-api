@@ -99,3 +99,25 @@ export const quizzes = asyncHandler(async (req, res) => {
 
   res.status(200).json({ quizzes: quizzes || [] });
 });
+
+//**Get a quiz by Id */
+export const quizz = asyncHandler(async (req, res) => {
+  const { course_id, quizz_id } = req.body;
+
+  //check course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //check is instructor or enrolled
+  const student = await isEnrolled(course_id, req.user.id);
+  const instructor = course.instructor_id.toString() === req.user.id.toString();
+
+  //only instructor or student
+  if (!student && !instructor) throw new ApiError("please enrolled first", 403);
+
+  //check for quizz exist
+  const quizz = await getQuizeById(quizz_id);
+  if (!quizz) throw new ApiError("quizz  not exist", 404);
+
+  res.status(200).json({ quizz });
+});
