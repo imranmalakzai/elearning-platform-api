@@ -7,6 +7,7 @@ import {
   userPost,
   updatePost,
   deleteForumPost,
+  coursePosts,
 } from "../repository/forums.post.repository.js";
 
 //**create a post (Instroucter,enrolled student) only */
@@ -77,4 +78,20 @@ export const deletePost = asyncHandler(async (req, res) => {
   if (!result) throw new ApiError("internal server error", 500);
 
   res.status(204).json({ message: "Record delete successfully" });
+});
+
+//**post belongs to a course module (Enrolled student & instructor only) */
+export const forumPosts = asyncHandler(async (req, res) => {
+  const { course_id } = req.params;
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //check is enrolled student
+  const student = await isEnrolled(course_id, req.user.id);
+  //check is instructor
+  const instructor = course.instructor_id.toString() === req.user.id.toString();
+  //only instructor or student
+  if (!student && !instructor) throw new ApiError("please enrolled first", 403);
+  const posts = await coursePosts(course_id);
+  res.status(200).json({ posts: posts || [] });
 });
