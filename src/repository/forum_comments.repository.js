@@ -35,3 +35,11 @@ export const comments = async (post_id) => {
   );
   return rows;
 };
+
+//**Get Comment by Id */
+export const getcommentById = async (comment_id) => {
+  const [rows] = await pool.query("SELECT * FROM forum_comments WHERE id = ?", [
+    comment_id,
+  ]);
+  return rows[0];
+};
