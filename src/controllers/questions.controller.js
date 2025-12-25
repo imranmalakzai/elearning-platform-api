@@ -149,3 +149,30 @@ export const quizzQuestions = asyncHandler(async (req, res) => {
   const question = await quizzQuestionsRepo(quiz_id);
   await res.status(200).json({ questions: question || [] });
 });
+
+//**Get a qustion by Id */
+export const getQuestion = asyncHandler(async (req, res) => {
+  const { course_id, quiz_id, question_id } = req.params;
+
+  //course
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //owner or enrolled students
+  const instructor = course.instructor_id.toString() === req.user.id.toString();
+  const enrStudent = await isEnrolled(course_id, req.user.id);
+
+  if (instructor && !enrStudent) {
+    throw new ApiError("Access denied", 403);
+  }
+
+  //quizz
+  const quizz = await quizBelongToCourse(course_id, quiz_id);
+  if (!quizz) throw new ApiError("quizz not exit", 404);
+
+  //question
+  const question = await questionBelongsToQuizz(quiz_id, question_id);
+  if (!question) throw new ApiError("question not exist", 404);
+
+  res.status(200).json({ question });
+});
