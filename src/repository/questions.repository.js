@@ -57,7 +57,7 @@ export const quesion = async (id) => {
 };
 
 //**Get A quizz by quiz_id,and Id */
-export const questionBelongsToCourse = async (quiz_id, id) => {
+export const questionBelongsToQuizz = async (quiz_id, id) => {
   const [rows] = await pool.query(
     "SELECT * FROM question WHERE quiz_id = ? AND id = ?",
     [quiz_id, id]
