@@ -5,6 +5,7 @@ import {
   badgeById,
   updateBadge as updateBadgeRepo,
   deleteBadge as deleteBadgeRepo,
+  badges as getAllBadges,
 } from "../repository/badges.repository.js";
 
 //** create badges Admin only */
@@ -56,4 +57,10 @@ export const deleteBadge = asyncHandler(async (req, res) => {
   if (!result) throw new ApiError("Internal server error", 500);
 
   res.status(200).json({ message: "badge deleted successfully" });
+});
+
+//**Get All badges */
+export const badges = asyncHandler(async (req, res) => {
+  const result = await getAllBadges();
+  res.status(200).json({ badges: result || [] });
 });
