@@ -2,11 +2,13 @@ import asyncHandler from "../utils/async_handler.js";
 import ApiError from "../utils/api_error.js";
 import { getCourseById } from "../repository/courses.repository.js";
 import { quizBelongToCourse } from "../repository/quizzes.repository.js";
+import { isEnrolled } from "../repository/enrollments.repository.js";
 import {
   createQuestion as createQuestionRepo,
   questionBelongsToQuizz,
   deleteQuestion,
   updateQuestion,
+  quizzQuestions as quizzQuestionsRepo,
 } from "../repository/questions.repository.js";
 
 //**create questions for a quizz of a course module */
@@ -120,4 +122,30 @@ export const updateQuizzQuestion = asyncHandler(async (req, res) => {
   );
   if (!result) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "question updated successfully" });
+});
+
+//**GET A quizz questions (Enrolled student & instructor only) */
+export const quizzQuestions = asyncHandler(async (req, res) => {
+  const { course_id, quiz_id } = req.params;
+
+  //course exist
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("course not exist", 404);
+
+  //is owner of the course  or enrol;ed to this course
+  const instructor = course.instructor_id.toString() === req.user.id.toString();
+  const enrStudent = await isEnrolled(course_id, req.user.id);
+
+  //check ownership
+  if (!instructor && !enrStudent) {
+    throw new ApiError("please enrlled first", 403);
+  }
+
+  //check quizz belongs to course
+  const quizz = await quizBelongToCourse(course_id, quiz_id);
+  if (!quizz) throw new ApiError("quizz not exit or not belons to course", 404);
+
+  //questions
+  const question = await quizzQuestionsRepo(quiz_id);
+  await res.status(200).json({ questions: question || [] });
 });
