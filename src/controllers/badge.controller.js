@@ -4,6 +4,7 @@ import {
   createBadge,
   badgeById,
   updateBadge as updateBadgeRepo,
+  deleteBadge as deleteBadgeRepo,
 } from "../repository/badges.repository.js";
 
 //** create badges Admin only */
@@ -40,4 +41,19 @@ export const updateBadge = asyncHandler(async (req, res) => {
   );
   if (!result) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "Badge updated successfully" });
+});
+
+//**Delete badge Admin only */
+export const deleteBadge = asyncHandler(async (req, res) => {
+  const { badge_id } = req.params;
+
+  //badge exist
+  const badge = await badgeById(badge_id);
+  if (!badge) throw new ApiError("Badge not exist", 404);
+
+  //result
+  const result = await deleteBadgeRepo(badge_id);
+  if (!result) throw new ApiError("Internal server error", 500);
+
+  res.status(200).json({ message: "badge deleted successfully" });
 });
