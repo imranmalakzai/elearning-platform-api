@@ -6,6 +6,7 @@ import {
   updateBadge as updateBadgeRepo,
   deleteBadge as deleteBadgeRepo,
   badges as getAllBadges,
+  badgeById,
 } from "../repository/badges.repository.js";
 
 //** create badges Admin only */
@@ -63,4 +64,12 @@ export const deleteBadge = asyncHandler(async (req, res) => {
 export const badges = asyncHandler(async (req, res) => {
   const result = await getAllBadges();
   res.status(200).json({ badges: result || [] });
+});
+
+//**Get a badge by Id */
+export const badge = asyncHandler(async (req, res) => {
+  const result = await badgeById(req.params.id);
+  if (!result) throw new ApiError("badge not exist", 404);
+
+  res.status(200).json({ badge: badge || {} });
 });
