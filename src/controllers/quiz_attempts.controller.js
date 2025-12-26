@@ -4,9 +4,10 @@ import { getQuizeById } from "../repository/quizzes.repository.js";
 import { isEnrolled } from "../repository/enrollments.repository.js";
 import { correctAnswers } from "../repository/questions.repository.js";
 import {
-  createQuizeAttempts,
+  attemptQuizAndUpdateUserPoints,
   userQuizzAtempt,
 } from "../repository/quiz_attempts.repository.js";
+import { updatePoints } from "../repository/users.repository.js";
 
 export const attemptQuiz = asyncHandler(async (req, res) => {
   const { quiz_id } = req.params;
@@ -54,7 +55,7 @@ export const attemptQuiz = asyncHandler(async (req, res) => {
   const score = Math.round((correctAns / totalQuestions) * 100);
 
   // Save attempt
-  const result = await createQuizeAttempts({
+  const result = await attemptQuizAndUpdateUserPoints({
     user_id,
     quiz_id,
     score,
