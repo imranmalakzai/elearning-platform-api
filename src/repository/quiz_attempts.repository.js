@@ -42,3 +42,33 @@ export const userQuizzAtempt = async (quiz_id, user_id) => {
   );
   return rows[0];
 };
+
+//**Inserting mutlitple queries into the database */
+export const attemptQuizAndUpdateUserPoints = async ({
+  user_id,
+  quiz_id,
+  score,
+}) => {
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    // Save quiz attempt
+    await connection.query(
+      "INSERT INTO quiz_attempts(user_id, quiz_id, score) VALUES (?, ?, ?)",
+      [user_id, quiz_id, score]
+    );
+
+    // Update points
+    await connection.query(
+      "UPDATE users SET points = points + ? WHERE id = ?",
+      [score, user_id]
+    );
+    await connection.commit();
+  } catch (err) {
+    await connection.rollback();
+    throw err;
+  } finally {
+    connection.release();
+  }
+};
