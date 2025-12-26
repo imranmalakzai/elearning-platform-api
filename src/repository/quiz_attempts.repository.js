@@ -34,3 +34,11 @@ export const userQuizAttempts = async (id) => {
   );
   return rows;
 };
+//**Get a user quiz attempt */
+export const userQuizzAtempt = async (quiz_id, user_id) => {
+  const [rows] = await pool.query(
+    "SELECT * FROM quizz_attempts WHERE quiz_id = ? AND user_id = ?",
+    [quiz_id, user_id]
+  );
+  return rows[0];
+};
