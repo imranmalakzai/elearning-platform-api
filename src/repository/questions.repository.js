@@ -59,7 +59,25 @@ export const quesion = async (id) => {
 //**Get A quizz by quiz_id,and Id */
 export const questionBelongsToQuizz = async (quiz_id, id) => {
   const [rows] = await pool.query(
-    "SELECT * FROM question WHERE quiz_id = ? AND id = ?",
+    "SELECT * FROM questions WHERE quiz_id = ? AND id = ?",
     [quiz_id, id]
   );
+};
+
+//***Get a qustion correct answers */
+export const correctAnswer = async (quesion_id) => {
+  const [rows] = await pool.query(
+    "SELECT correct_option FROM questions WHERE id = ?",
+    [quesion_id]
+  );
+  return rows[0];
+};
+
+//**Get all correct question of a quizz */
+export const correctAnswers = async (quiz_id) => {
+  const [rows] = await pool.query(
+    "SELECT correct_option FROM questions WHERE quiz_id = ?",
+    [quiz_id]
+  );
+  return rows;
 };
