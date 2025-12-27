@@ -53,3 +53,12 @@ export const getLessonById = async (lesson_id) => {
   );
   return rows[0];
 };
+
+//**Get lesson with course_id, and lesson _id */
+export const courseLesson = async (course_id, lesson_id) => {
+  const [rows] = await pool.query(
+    "SELECT id from lessons WHERE course_id = ? and id = ?",
+    [course_id, lesson_id]
+  );
+  return rows[0];
+};
