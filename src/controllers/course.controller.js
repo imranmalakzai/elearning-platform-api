@@ -6,6 +6,7 @@ import {
   courses,
   getCourseById,
   updateCouseDetails,
+  instructorCourses,
 } from "../repository/courses.repository.js";
 
 //**create A course (Instructor only) */
@@ -68,4 +69,10 @@ export const getCourse = asyncHandler(async (req, res) => {
   const course = await getCourseById(req.params.id);
   if (!course) throw new ApiError("course not exist by this id ", 404);
   res.status(200).json({ course });
+});
+
+//**Instructor courses */
+export const getInstructorCourses = asyncHandler(async (req, res) => {
+  const courses = await instructorCourses(req.params.id);
+  res.status(200).json({ courses: courses || [] });
 });
