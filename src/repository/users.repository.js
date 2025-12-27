@@ -82,7 +82,7 @@ export const userPoints = async (user_id) => {
 
 //**update user role */
 export const changeRole = async (id, role) => {
-  const result = pool.query("UPDATE users SET role = ? WHERE id = ? ", [
+  const result = await pool.query("UPDATE users SET role = ? WHERE id = ? ", [
     role,
     id,
   ]);
@@ -90,6 +90,13 @@ export const changeRole = async (id, role) => {
 };
 //**Delete A user */
 export const deleteUser = async (id) => {
-  const result = pool.query("DELETE FROM users WHERE id = ?", [id]);
+  const result = await pool.query("DELETE FROM users WHERE id = ?", [id]);
   return result.affectedRows;
+};
+//**Get all instructors */
+export const instructors = async () => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE role = ?", [
+    "instrucor",
+  ]);
+  return rows;
 };
