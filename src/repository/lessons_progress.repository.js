@@ -1,4 +1,5 @@
 import pool from "../config/db.config.js";
+import { checkAndAwardBadge } from "../helper/gamefication.helper.js";
 
 //**track lessons progress */
 export const trackProgress = async (student_id, lesson_id) => {
@@ -42,4 +43,36 @@ export const currentLessonProgress = async (id) => {
     [id]
   );
   return rows[0];
+};
+
+//**Mark lesson as complete and give rewared */
+export const markLessonCompleteAndGiveReward = async (
+  user_id,
+  lesson_id,
+  score
+) => {
+  const connection = await pool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+    //mark lesson complete
+    await connection.query(
+      "INSERT INTO lesson_progress (user_id,lesson_id) VALUES (?,?)",
+      [user_id, lesson_id]
+    );
+    // Update points
+    await connection.query(
+      "UPDATE users SET points = points + ? WHERE id = ?",
+      [score, user_id]
+    );
+
+    await checkAndAwardBadge(user_id, connection);
+
+    await connection.commit();
+  } catch (error) {
+    connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 };
