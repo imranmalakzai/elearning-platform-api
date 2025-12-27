@@ -13,6 +13,7 @@ import {
   changeRole,
   getAllUsers,
   getUserById,
+  instructors,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 
@@ -91,11 +92,19 @@ export const changePasswordController = asyncHandler(async (req, res) => {
 //**Change user role controller (Admin only) */
 export const changeRoleController = asyncHandler(async (req, res) => {
   const role = req.body.role;
+
+  //validate role
   if (!Roles.includes(role)) throw new ApiError("Invalid Role", 400);
+
+  //user exist
   const user = await getUserById(req.params.id);
   if (!user) throw new ApiError("Invalid user id", 400);
+
+  //update user
   const update = await changeRole(user.id, role);
   if (!update) throw new ApiError("unable to update role", 500);
+
+  //response
   res.status(204).json({ message: "user role update successfully" });
 });
 
@@ -115,4 +124,10 @@ export const users = asyncHandler(async (req, res) => {
 export const userById = asyncHandler(async (req, res) => {
   const user = await getUserById(req.user.id);
   res.status(200).json({ user: user || {} });
+});
+
+//**Get all instrucotrs */
+export const getAllInstructors = asyncHandler(async (req, res) => {
+  const result = await instructors();
+  res.status(200).json({ instructors: result || [] });
 });
