@@ -56,6 +56,6 @@ export const courseProgress = asynHandler(async (req, res) => {
   //completed lessons
   const completed = await completeLessons(course_id, req.user.id);
 
-  const result = (completed / total) * 100;
+  const result = Math.round((completed / total) * 100);
   res.status(200).json({ progress: result });
 });
