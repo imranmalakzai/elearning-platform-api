@@ -11,6 +11,7 @@ import {
   changePassword,
   getAllStudents,
   changeRole,
+  getAllUsers,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 
@@ -55,6 +56,7 @@ export const userProfile = asyncHandler(async (req, res) => {
 
 //**Update user profile */
 export const updateProfile = asyncHandler(async (req, res) => {
+  //name and email only
   const user = await updateUserProfile({ ...req.body }, req.user.id);
   if (!user) throw new ApiError("unable to update the user profile");
   res.status(200).json({ message: "profile updated successfully" });
@@ -100,4 +102,10 @@ export const changeRoleController = asyncHandler(async (req, res) => {
 export const studentsController = asyncHandler(async (req, res) => {
   const users = await getAllStudents();
   res.status(200).json({ users });
+});
+
+//**Get all users **/
+export const users = asyncHandler(async (req, res) => {
+  const result = await getAllUsers();
+  res.status(200).json({ users: result || [] });
 });
