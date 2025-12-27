@@ -73,8 +73,10 @@ export const updatePoints = async (points, id) => {
 };
 
 //**Get user points */
-export const userPoints = async (id) => {
-  const [rows] = await pool.query("SELECT * FROM users WHERE id = ?", [id]);
+export const userPoints = async (user_id) => {
+  const [rows] = await pool.query("SELECT points FROM users WHERE id = ?", [
+    id,
+  ]);
   return rows[0];
 };
 
