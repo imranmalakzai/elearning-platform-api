@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/env.config.js";
 import ApiError from "../utils/api_error.js";
 
-export const protect = async (req, res, next) => {
+export const auth = async (req, res, next) => {
   const header = req.headers.authorization;
   if (!header || header.startsWith("Bearer")) {
     throw new ApiError("please authenticate", 401);
