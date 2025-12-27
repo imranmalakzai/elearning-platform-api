@@ -1,4 +1,5 @@
 import pool from "../config/db.config.js";
+import { checkAndAwardBadge } from "../helper/gamefication.helper.js";
 
 //**Add user score in a test  Attempts */
 export const createQuizeAttempts = async (data) => {
@@ -64,6 +65,10 @@ export const attemptQuizAndUpdateUserPoints = async ({
       "UPDATE users SET points = points + ? WHERE id = ?",
       [score, user_id]
     );
+
+    //check and award badge
+    await checkAndAwardBadge(user_id, connection);
+
     await connection.commit();
   } catch (err) {
     await connection.rollback();
