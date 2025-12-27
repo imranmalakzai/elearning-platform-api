@@ -12,6 +12,7 @@ import {
   getAllStudents,
   changeRole,
   getAllUsers,
+  getUserById,
 } from "../repository/users.repository.js";
 import { generateToken } from "../utils/jwt.js";
 
@@ -108,4 +109,10 @@ export const studentsController = asyncHandler(async (req, res) => {
 export const users = asyncHandler(async (req, res) => {
   const result = await getAllUsers();
   res.status(200).json({ users: result || [] });
+});
+
+//**Get a user by Id */
+export const userById = asyncHandler(async (req, res) => {
+  const user = await getUserById(req.user.id);
+  res.status(200).json({ user: user || {} });
 });
