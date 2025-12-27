@@ -45,6 +45,9 @@ export const currentLessonProgress = async (id) => {
   return rows[0];
 };
 
+//**Get all completed lessons */
+export const completedLessons = async();
+
 //**Mark lesson as complete and give rewared */
 export const markLessonCompleteAndGiveReward = async (
   user_id,
@@ -75,4 +78,12 @@ export const markLessonCompleteAndGiveReward = async (
   } finally {
     connection.release();
   }
+};
+//**Get completed lessons for current user */
+export const completeLessons = async (course_id, user_id) => {
+  const [rows] = await pool.query(
+    "SELECT COUNT (lesson_id) FROM lesson_progress Join lessons On lesson_progress.lesson_id = lessons.id WHERE lesson_progress.user_id = ? , AND lessons.course_id = ?",
+    [user_id, course_id]
+  );
+  return rows[0];
 };
