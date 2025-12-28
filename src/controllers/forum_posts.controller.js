@@ -97,3 +97,19 @@ export const forumPosts = asyncHandler(async (req, res) => {
   const posts = await coursePosts(course_id);
   res.status(200).json({ posts: posts || [] });
 });
+
+//**Get a forum post byId */
+export const getPostById = asyncHandler(async (req, res) => {
+  const { course_id, postId } = req.params;
+
+  const course = await getCourseById(course_id);
+  if (!course) throw new ApiError("post not exist", 404);
+
+  const user = isEnrolled(course_id, req.user.id);
+  if (!user) throw new ApiError("unauthorized", 403);
+
+  const post = await userPost(postId);
+  if (!post) throw new ApiError("post not exist", 404);
+
+  res.status(200).json();
+});
