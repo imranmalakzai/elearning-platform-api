@@ -15,3 +15,5 @@ enrollmentRouter.route("/:courseId").delete(cancellEnrollment);
 enrollmentRouter
   .route("/:courseId")
   .get(allowRoles("instructor"), courseStudents);
+
+export default enrollmentRouter;
