@@ -100,3 +100,8 @@ export const instructors = async () => {
   ]);
   return rows;
 };
+//**Get spasafic users */
+export const usersByrole = async (role) => {
+  const [rows] = await pool.query("SELECT * FROM users WHERE role = ?", [role]);
+  return rows;
+};
