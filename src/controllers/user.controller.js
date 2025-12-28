@@ -3,6 +3,7 @@ import asyncHandler from "../utils/async_handler.js";
 import bcrypt from "bcrypt";
 import { Roles } from "../utils/role.js";
 import {
+  usersByrole,
   createUser,
   getUserByEmail,
   getUserById,
@@ -130,4 +131,16 @@ export const userById = asyncHandler(async (req, res) => {
 export const getAllInstructors = asyncHandler(async (req, res) => {
   const result = await instructors();
   res.status(200).json({ instructors: result || [] });
+});
+
+//** Get users by role */
+export const getUserByRoles = asyncHandler(async (req, res) => {
+  const { role } = req.query;
+
+  if ((role || "students") && !Roles.includes(role)) {
+    throw new ApiError("Invalid filter role not exist", 400);
+  }
+
+  const result = await usersByrole(role);
+  res.status(200).json({ role: result || [] });
 });
