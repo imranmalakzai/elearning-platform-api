@@ -19,42 +19,42 @@ export const createCourseController = asyncHandler(async (req, res) => {
     description,
     instructor_id: req.user.id,
   });
-  if (!course) throw new ApiError("internal server error", 500);
+  if (course === 0) throw new ApiError("internal server error", 500);
   res.status(201).json({ message: "course created successfully" });
 });
 
 //**update a course (Instructor only) */
 export const updateCourse = asyncHandler(async (req, res) => {
-  const { course_id } = req.params;
+  const { courseId } = req.params;
   const { title, description } = req.body;
-  const course = await getCourseById(course_id);
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 404);
 
   //ensure course belong to the user
-  if (course.instructor_id.toString() !== req.user.id) {
-    throw new ApiError("unauthroized", 404);
+  if (course.instructor_id.toString() !== req.user.id.toString()) {
+    throw new ApiError("Access denied", 403);
   }
   if (!title || !description) {
     throw new ApiError("title and description is requried", 409);
   }
-  const result = await updateCouseDetails({ title, description }, course_id);
-  if (!result) throw new ApiError("Internal server error", 500);
-  res.status(204).json({ message: "course updated successfully" });
+  const result = await updateCouseDetails({ title, description }, courseId);
+  if (result === 0) throw new ApiError("Internal server error", 500);
+  res.status(200).json({ message: "course updated successfully" });
 });
 
 //**Delete a course (Instructor only) */
 export const deleteCourseController = asyncHandler(async (req, res) => {
-  const { course_id } = req.params;
-  const course = await getCourseById(course_id);
+  const { courseId } = req.params;
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 404);
 
   //ensure course belongs to creater
   if (course.instructor_id.toString() !== req.user.id.toString()) {
-    throw new ApiError("unauthorized", 403);
+    throw new ApiError("Access denied", 403);
   }
 
-  const result = await deleteCourse(course_id);
-  if (!result) throw new ApiError("internal server error", 500);
+  const result = await deleteCourse(courseId);
+  if (result === 0) throw new ApiError("internal server error", 500);
   res.status(400).json({ message: "course deleted successfully" });
 });
 
@@ -66,13 +66,13 @@ export const coursesController = asyncHandler(async (req, res) => {
 
 //**Get a course by Id */
 export const getCourse = asyncHandler(async (req, res) => {
-  const course = await getCourseById(req.params.id);
+  const course = await getCourseById(req.params.courseId);
   if (!course) throw new ApiError("course not exist by this id ", 404);
-  res.status(200).json({ course });
+  res.status(200).json({ course: course || "course not exist" });
 });
 
 //**Instructor courses */
 export const getInstructorCourses = asyncHandler(async (req, res) => {
   const courses = await instructorCourses(req.params.id);
-  res.status(200).json({ courses: courses || [] });
+  res.status(200).json({ courses });
 });
