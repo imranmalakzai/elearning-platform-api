@@ -22,6 +22,12 @@ export const register = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password)
     throw new ApiError("All Fields are required", 409);
+
+  //check user exist
+  const exist = await getUserByEmail(email);
+  if (exist) throw new ApiError("user already exist", 400);
+
+  //hash and store
   const hashPassword = await bcrypt.hash(password, 10);
   const user = await createUser({
     name,
