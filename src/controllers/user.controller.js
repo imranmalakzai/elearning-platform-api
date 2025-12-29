@@ -130,7 +130,8 @@ export const users = asyncHandler(async (req, res) => {
 //**Get a user by Id */
 export const userById = asyncHandler(async (req, res) => {
   const user = await getUserById(req.params.id);
-  res.status(200).json({ user: user || {} });
+  if (!user) throw new ApiError("user not exist", 404);
+  res.status(200).json({ user });
 });
 
 //**Get all instrucotrs */
