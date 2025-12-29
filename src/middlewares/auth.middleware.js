@@ -4,7 +4,7 @@ import ApiError from "../utils/api_error.js";
 
 export const auth = async (req, res, next) => {
   const header = req.headers.authorization;
-  if (!header || header.startsWith("Bearer")) {
+  if (!header || !header.startsWith("Bearer")) {
     throw new ApiError("please authenticate", 401);
   }
   const token = header.split(" ")[1];
