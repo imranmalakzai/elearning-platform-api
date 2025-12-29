@@ -28,7 +28,7 @@ export const register = asyncHandler(async (req, res) => {
     email,
     password: hashPassword,
   });
-  if (!user) throw new ApiError("unable to create register user", 400);
+  if (user === 0) throw new ApiError("unable to create register user", 400);
   res.status(201).json({ message: "registeration successed" });
 });
 
