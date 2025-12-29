@@ -1,8 +1,7 @@
 import ApiError from "../utils/api_error.js";
 import asyncHandler from "../utils/async_handler.js";
 import {
-  createBadge,
-  badgeById,
+  createBadge as createBadgeRepo,
   updateBadge as updateBadgeRepo,
   deleteBadge as deleteBadgeRepo,
   badges as getAllBadges,
@@ -17,7 +16,7 @@ export const createBadge = asyncHandler(async (req, res) => {
     throw new ApiError("All fileds are required");
   }
 
-  const badge = await createBadge({ name, description, points_required });
+  const badge = await createBadgeRepo({ name, description, points_required });
   if (!badge) throw new ApiError("Internal server error", 500);
 
   res.status(201).json({ message: "badge created successfully" });

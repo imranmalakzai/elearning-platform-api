@@ -38,4 +38,3 @@ lessonRouter.delete(
 );
 
 export default lessonRouter;
-s;

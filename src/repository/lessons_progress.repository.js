@@ -45,9 +45,6 @@ export const currentLessonProgress = async (id) => {
   return rows[0];
 };
 
-//**Get all completed lessons */
-export const completedLessons = async();
-
 //**Mark lesson as complete and give rewared */
 export const markLessonCompleteAndGiveReward = async (
   user_id,

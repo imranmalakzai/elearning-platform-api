@@ -40,7 +40,7 @@ export const getAllInstructors = async () => {
 export const createUser = async (data) => {
   const result = await pool.query(
     "INSERT INTO users (name,email,password) VALUES (?,?,?)",
-    [data.name, data.email, data.passord]
+    [data.name, data.email, data.password]
   );
   return result.affectedRows;
 };

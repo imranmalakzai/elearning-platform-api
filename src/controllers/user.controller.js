@@ -6,7 +6,6 @@ import {
   usersByrole,
   createUser,
   getUserByEmail,
-  getUserById,
   deleteUser,
   updateUserProfile,
   changePassword,
