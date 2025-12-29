@@ -59,6 +59,7 @@ export const login = asyncHandler(async (req, res) => {
 //**GET LoggedIn USER PROFILE */
 export const userProfile = asyncHandler(async (req, res) => {
   const user = await getUserById(req.user.id);
+  if (!user) throw new ApiError("user not exist", 404);
   res.status(200).json({ user });
 });
 
@@ -66,31 +67,31 @@ export const userProfile = asyncHandler(async (req, res) => {
 export const updateProfile = asyncHandler(async (req, res) => {
   //name and email only
   const user = await updateUserProfile({ ...req.body }, req.user.id);
-  if (!user) throw new ApiError("unable to update the user profile");
+  if (user === 0) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "profile updated successfully" });
 });
 
 //**Delete Account profile */
 export const deleteAccount = asyncHandler(async (req, res) => {
   const user = await deleteUser(req.user.id);
-  req.user.remove();
   if (!user) throw new ApiError("unable to delete account", 400);
   res.status(200).json({ message: "Account deleted successsfully" });
 });
 
 //** Change password */
 export const changePasswordController = asyncHandler(async (req, res) => {
-  const { oldPassword, newpassword } = req.body;
-  if (!oldPassword || !newpassword)
-    throw new ApiError("old passowrd and new passward is required", 409);
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  if (!oldPassword || !newPassword)
+    throw new ApiError("old passowrd and new passward is required", 400);
 
   const user = await getUserById(req.user.id);
   const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) throw new ApiError("Invalid old password", 409);
 
-  const passward = await bcrypt.hash(newpassword, 10);
+  const passward = await bcrypt.hash(newPassword, 10);
   const update = await changePassword(user.id, passward);
-  if (!update) throw new ApiError("unable to update password");
+  if (update === 0) throw new ApiError("unable to update password", 400);
 
   res.status(200).json({ message: "password updated successfully" });
 });
@@ -108,10 +109,10 @@ export const changeRoleController = asyncHandler(async (req, res) => {
 
   //update user
   const update = await changeRole(user.id, role);
-  if (!update) throw new ApiError("unable to update role", 500);
+  if (update === 0) throw new ApiError("unable to update role", 500);
 
   //response
-  res.status(204).json({ message: "user role update successfully" });
+  res.status(200).json({ message: "user role update successfully" });
 });
 
 //**Get all students (admin only) */
@@ -128,7 +129,7 @@ export const users = asyncHandler(async (req, res) => {
 
 //**Get a user by Id */
 export const userById = asyncHandler(async (req, res) => {
-  const user = await getUserById(req.user.id);
+  const user = await getUserById(req.params.id);
   res.status(200).json({ user: user || {} });
 });
 
@@ -140,12 +141,17 @@ export const getAllInstructors = asyncHandler(async (req, res) => {
 
 //** Get users by role */
 export const getUserByRoles = asyncHandler(async (req, res) => {
-  const { role } = req.query;
+  let { role } = req.query;
+  let users;
 
-  if ((role || "students") && !Roles.includes(role)) {
-    throw new ApiError("Invalid filter role not exist", 400);
+  if (!role) {
+    users = await getAllUsers();
+  } else {
+    if (role && !Roles.includes(role)) {
+      throw new ApiError("Invalid filter role not exist", 400);
+    }
+    users = await usersByrole(role);
   }
 
-  const result = await usersByrole(role);
-  res.status(200).json({ role: result || [] });
+  res.status(200).json({ result: users });
 });
