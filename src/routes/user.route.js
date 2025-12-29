@@ -10,7 +10,6 @@ import {
   updateProfile,
   deleteAccount,
   changePasswordController,
-  users,
   userById,
   changeRoleController,
   getUserByRoles,
