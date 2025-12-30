@@ -57,7 +57,7 @@ export const markLessonCompleteAndGiveReward = async (
     await connection.beginTransaction();
     //mark lesson complete
     await connection.query(
-      "INSERT INTO lesson_progress (user_id,lesson_id) VALUES (?,?)",
+      "INSERT INTO lesson_progress (student_id,lesson_id) VALUES (?,?)",
       [user_id, lesson_id]
     );
     // Update points
@@ -79,8 +79,17 @@ export const markLessonCompleteAndGiveReward = async (
 //**Get completed lessons for current user */
 export const completeLessons = async (course_id, user_id) => {
   const [rows] = await pool.query(
-    "SELECT COUNT (lesson_id) FROM lesson_progress Join lessons On lesson_progress.lesson_id = lessons.id WHERE lesson_progress.user_id = ? , AND lessons.course_id = ?",
+    "SELECT COUNT(*) as completed FROM lesson_progress JOIN lessons ON lesson_progress.lesson_id = lessons.id WHERE lesson_progress.student_id = ? AND lessons.course_id = ?",
     [user_id, course_id]
+  );
+  return rows[0].completed;
+};
+
+//**get lesson progress by current users */
+export const lessonCompleted = async (student_id, lesson_id) => {
+  const [rows] = await pool.query(
+    "SELECT id from lesson_progress WHERE student_id = ? AND lesson_id = ?",
+    [student_id, lesson_id]
   );
   return rows[0];
 };
