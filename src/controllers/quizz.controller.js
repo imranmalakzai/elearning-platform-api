@@ -7,64 +7,65 @@ import {
   updateQuizz as updateQuizzRepo,
   deleteQuizz as deleteQuizzRepo,
   getQuizeById,
+  courseQuizzes,
 } from "../repository/quizzes.repository.js";
 
 //** Create a Quizz for a course (Instructor only) */
 export const createQuizz = asyncHandler(async (req, res) => {
-  const { course_id } = req.params;
+  const { courseId } = req.params;
   const { title } = req.body;
 
   //is course exist
-  const course = await getCourseById(course_id);
-  if (!course) throw new ApiError("course not exist");
+  const course = await getCourseById(courseId);
+  if (!course) throw new ApiError("course not exist", 404);
 
   //is instructor of the course
   const instructor = course.instructor_id.toString() === req.user.id.toString();
   if (!instructor) throw new ApiError("Access denied", 403);
 
   //check for title
-  if (!title) throw new ApiError("please provide the title", 409);
+  if (!title) throw new ApiError("please provide the title", 400);
 
   //quizz
-  const quize = await createQuizzRepo({ course_id, title });
-  if (!quize) throw new ApiError("Internal Server error", 500);
+  const quize = await createQuizzRepo({ course_id: courseId, title });
+  if (quize === 0) throw new ApiError("Internal Server error", 500);
 
   res.status(200).json({ message: "quiz created successfully" });
 });
 
 //**update course  quizz (Instructor only)* /
 export const updateQuizz = asyncHandler(async (req, res) => {
-  const { course_id, quizz_id } = req.params;
+  const { courseId, quizId } = req.params;
   const { title } = req.body;
 
   //couse exist ?
-  const course = await getCourseById(course_id);
-  if (!course) throw new ApiError("course not exist");
-
+  const course = await getCourseById(courseId);
+  if (!course) throw new ApiError("course not exist", 404);
+  console.log(course);
   //is owner of the course
   const owner = course.instructor_id.toString() === req.user.id.toString();
   if (!owner) throw new ApiError("Access denied", 403);
 
   //is quizz exist
-  const quize = await getQuizeById(quizz_id);
+  const quize = await getQuizeById(quizId);
   if (!quize) throw new ApiError("quiz not exit", 404);
 
   //check for title
   if (!title) throw new ApiError("please provide the title", 409);
 
   //update quize
-  const update = await updateQuizzRepo(quizz_id, { title, course_id });
-  if (!update) throw new ApiError("Internal server error ", 500);
+  const update = await updateQuizzRepo(quizId, title);
+  if (update === 0) throw new ApiError("Internal server error ", 500);
 
   res.status(200).json({ message: "quizz update successfully" });
 });
 
 //**Delete quizz (instrutor only) */
 export const delteQuizz = asyncHandler(async (req, res) => {
-  const { course_id, quizz_id } = req.params;
+  const { courseId, quizId } = req.params;
 
   //course exist ?
-  const course = await getCourseById(course_id);
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist");
 
   //is owner of the course
@@ -72,51 +73,52 @@ export const delteQuizz = asyncHandler(async (req, res) => {
   if (!owner) throw new ApiError("Access denied", 403);
 
   //is quizz exist
-  const quize = await getQuizeById(quizz_id);
+  const quize = await getQuizeById(quizId);
   if (!quize) throw new ApiError("quiz not exit", 404);
 
-  const result = await deleteQuizzRepo(quizz_id);
-  if (!result) throw new ApiError("Internal server error", 500);
+  const result = await deleteQuizzRepo(quizId);
+  if (result === 0) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "quizz deleted successfully" });
 });
 
 //**Get all quizzes belongs to a course (enrolled student & instructor only) */
 export const quizzes = asyncHandler(async (req, res) => {
-  const { course_id } = req.params;
+  const { courseId } = req.params;
 
   //check if course exist
-  const course = await getCourseById(course_id);
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 404);
 
   //check is ownered
   const owner = course.instructor_id.toString() === req.user.id.toString();
   //is enrolled student
-  const student = await isEnrolled(course_id, req.user.id);
+  const student = await isEnrolled(courseId, req.user.id);
   if (!owner && !student) throw new ApiError("please enroll first", 403);
 
   //quizzes
-  const quizzes = await courseQuizzes(course_id);
+  const quizzes = await courseQuizzes(courseId);
 
   res.status(200).json({ quizzes: quizzes || [] });
 });
 
 //**Get a quiz by Id */
 export const quizz = asyncHandler(async (req, res) => {
-  const { course_id, quizz_id } = req.body;
+  const { courseId, quizId } = req.params;
 
   //check course exist
-  const course = await getCourseById(course_id);
+  console.log(courseId);
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 404);
 
   //check is instructor or enrolled
-  const student = await isEnrolled(course_id, req.user.id);
+  const student = await isEnrolled(courseId, req.user.id);
   const instructor = course.instructor_id.toString() === req.user.id.toString();
 
   //only instructor or student
   if (!student && !instructor) throw new ApiError("please enrolled first", 403);
 
   //check for quizz exist
-  const quizz = await getQuizeById(quizz_id);
+  const quizz = await getQuizeById(quizId);
   if (!quizz) throw new ApiError("quizz  not exist", 404);
 
   res.status(200).json({ quizz });
