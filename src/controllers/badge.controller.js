@@ -13,18 +13,18 @@ export const createBadge = asyncHandler(async (req, res) => {
   const { name, description, points_required } = req.body;
 
   if (!name || !description || !points_required) {
-    throw new ApiError("All fileds are required");
+    throw new ApiError("All fileds are required", 400);
   }
 
   const badge = await createBadgeRepo({ name, description, points_required });
-  if (!badge) throw new ApiError("Internal server error", 500);
+  if (badge === 0) throw new ApiError("Internal server error", 500);
 
   res.status(201).json({ message: "badge created successfully" });
 });
 
 //**Updte bade Admin only */
 export const updateBadge = asyncHandler(async (req, res) => {
-  const { badge_id } = req.params;
+  const { badgeId } = req.params;
   const { name, description, points_required } = req.body;
 
   if (!name || !description || !points_required) {
@@ -32,30 +32,29 @@ export const updateBadge = asyncHandler(async (req, res) => {
   }
 
   //badge exist
-  const badge = await badgeById(badge_id);
+  const badge = await badgeById(badgeId);
   if (!badge) throw new ApiError("Badge not exist");
 
   //badge
   const result = await updateBadgeRepo(
     { name, description, points_required },
-    badge_id
+    badgeId
   );
-  if (!result) throw new ApiError("Internal server error", 500);
+  if (result === 0) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "Badge updated successfully" });
 });
 
 //**Delete badge Admin only */
 export const deleteBadge = asyncHandler(async (req, res) => {
-  const { badge_id } = req.params;
+  const { badgeId } = req.params;
 
   //badge exist
-  const badge = await badgeById(badge_id);
+  const badge = await badgeById(badgeId);
   if (!badge) throw new ApiError("Badge not exist", 404);
 
   //result
-  const result = await deleteBadgeRepo(badge_id);
-  if (!result) throw new ApiError("Internal server error", 500);
-
+  const result = await deleteBadgeRepo(badgeId);
+  if (result === 0) throw new ApiError("Internal server error", 500);
   res.status(200).json({ message: "badge deleted successfully" });
 });
 
@@ -67,8 +66,8 @@ export const badges = asyncHandler(async (req, res) => {
 
 //**Get a badge by Id */
 export const badge = asyncHandler(async (req, res) => {
-  const result = await badgeById(req.params.id);
+  const result = await badgeById(req.params.badgeId);
   if (!result) throw new ApiError("badge not exist", 404);
 
-  res.status(200).json({ badge: badge || {} });
+  res.status(200).json({ badge: result });
 });
