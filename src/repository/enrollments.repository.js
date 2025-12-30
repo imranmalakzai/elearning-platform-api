@@ -3,7 +3,7 @@ import pool from "../config/db.config.js";
 //**create an Enrollment */
 export const createEnrollment = async (course_id, student_id) => {
   const result = await pool.query(
-    "INSERT INTO enrollments (course_id,student_id)",
+    "INSERT INTO enrollments (course_id,student_id) VALUES (?,?)",
     [course_id, student_id]
   );
   return result.affectedRows;
@@ -27,7 +27,7 @@ export const deleteEnrollment = async (id) => {
 //**Get all users Enrolled in a course */
 export const courseEnrolledUsers = async (course_id) => {
   const [rows] = await pool.query(
-    "SELECT * FROM enrollment WHERE course_id = ?",
+    "SELECT * FROM enrollments WHERE course_id = ?",
     [course_id]
   );
   return rows;
