@@ -9,11 +9,11 @@ export const createQuizz = async (data) => {
   return result.affectedRows;
 };
 //**update quize */
-export const updateQuizz = async (id, data) => {
-  const result = await pool.query(
-    "UPDATE quizzes set course_id = ?, title = ? WHERE id = ?",
-    [data.course_id, data.title, id]
-  );
+export const updateQuizz = async (id, title) => {
+  const result = await pool.query("UPDATE quizzes set title = ? WHERE id = ?", [
+    title,
+    id,
+  ]);
   return result.affectedRows;
 };
 //**Delete A queize */
@@ -24,7 +24,7 @@ export const deleteQuizz = async (id) => {
 //**Get All quizes for a course */
 export const courseQuizzes = async (course_id) => {
   const [rows] = await pool.query("SELECT * FROM quizzes WHERE course_id = ?", [
-    id,
+    course_id,
   ]);
   return rows;
 };
