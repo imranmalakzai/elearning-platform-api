@@ -9,7 +9,7 @@ import {
   quizzQuestions,
 } from "../controllers/questions.controller.js";
 
-const questionRouter = express.Router();
+const questionRouter = express.Router({ mergeParams: true });
 
 questionRouter.use(auth);
 
