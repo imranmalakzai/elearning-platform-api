@@ -15,6 +15,6 @@ commentRouter.route("/").post(postComment);
 commentRouter.route("/").get(forumPostComments);
 commentRouter.route("/:commentId").get(getCommentById);
 commentRouter.route("/:commentId").patch(editComment);
-commentRouter.route("/commentId").delete(deleteComment);
+commentRouter.route("/:commentId").delete(deleteComment);
 
 export default commentRouter;
