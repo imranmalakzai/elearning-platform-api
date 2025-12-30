@@ -14,7 +14,7 @@ quizzRouter.use(auth);
 
 quizzRouter.route("/").get(quizzes);
 quizzRouter.route("/").post(allowRoles("instructor"), createQuizz);
-quizzRouter.route("/:quizId").put(allowRoles("instractor"), updateQuizz);
+quizzRouter.route("/:quizId").patch(allowRoles("instructor"), updateQuizz);
 quizzRouter.route("/:quizId").delete(allowRoles("instructor"), delteQuizz);
 quizzRouter.route("/:quizId").get(quizz);
 
