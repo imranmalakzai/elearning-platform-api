@@ -1,19 +1,19 @@
 import pool from "../config/db.config.js";
 
 //**create an Enrollment */
-export const createEnrollment = async (course_id, user_id) => {
+export const createEnrollment = async (course_id, student_id) => {
   const result = await pool.query(
-    "INSERT INTO enrollments (course_id,user_id)",
-    [course_id, user_id]
+    "INSERT INTO enrollments (course_id,student_id)",
+    [course_id, student_id]
   );
   return result.affectedRows;
 };
 
 //** update on Enrollment */
-export const updateEnrollment = async (course_id, user_id, id) => {
+export const updateEnrollment = async (course_id, student_id, id) => {
   const result = await pool.query(
-    "UPDATE enrollments SET course_id = ?,user_id = ? WHERE id = ?",
-    [course_id, user_id, id]
+    "UPDATE enrollments SET course_id = ?,student_id = ? WHERE id = ?",
+    [course_id, student_id, id]
   );
   return result.affectedRows;
 };
@@ -34,19 +34,19 @@ export const courseEnrolledUsers = async (course_id) => {
 };
 
 //**check user enrolled to a course or not */
-export const isEnrolled = async (course_id, user_id) => {
+export const isEnrolled = async (course_id, student_id) => {
   const [rows] = await pool.query(
-    "SELECT * FROM enrollments WHERE course_id = ? AND user_id = ?",
-    [course_id, user_id]
+    "SELECT * FROM enrollments WHERE course_id = ? AND student_id = ?",
+    [course_id, student_id]
   );
   return rows[0];
 };
 
 //**GET a users all enrolled courses */
-export const userEnrolledCourses = async (user_id) => {
+export const userEnrolledCourses = async (student_id) => {
   const [rows] = await pool.query(
-    "SELEDCT * FROM enrollments WHERE user_id = ?",
-    [user_id]
+    "SELEDCT * FROM enrollments WHERE student_id = ?",
+    [student_id]
   );
   return rows.affectedRows;
 };
