@@ -11,9 +11,7 @@ const enrollmentRouter = express.Router({ mergeParams: true });
 
 enrollmentRouter.use(auth);
 enrollmentRouter.route("/").post(enrollToACourse);
-enrollmentRouter.route("/:courseId").delete(cancellEnrollment);
-enrollmentRouter
-  .route("/:courseId")
-  .get(allowRoles("instructor"), courseStudents);
+enrollmentRouter.route("/").delete(cancellEnrollment);
+enrollmentRouter.route("/").get(allowRoles("instructor"), courseStudents);
 
 export default enrollmentRouter;
