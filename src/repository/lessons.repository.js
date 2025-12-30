@@ -65,8 +65,8 @@ export const courseLesson = async (course_id, lesson_id) => {
 //**total course lessons */
 export const totalLessons = async (course_id) => {
   const [rows] = await pool.query(
-    "SELECT COUNT (id) FROM lessons WHERE course_id = ? ",
+    "SELECT COUNT(*) as total FROM lessons WHERE course_id = ? ",
     [course_id]
   );
-  return rows[0];
+  return rows[0].total;
 };
