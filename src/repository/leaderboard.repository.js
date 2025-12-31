@@ -11,9 +11,8 @@ export const globlal = async () => {
 //**Top users in a course */
 export const course = async (courseId) => {
   const [rows] = await pool.query(
-    "SELECT ROW_NUMBER() OVER (ORDER BY s.points DESC) AS Rank, s.name, s.points FROM enrollments e JOIN users s ON e.student_id = s.id WHERE e.course_id = ?"[
-      courseId
-    ]
+    "SELECT ROW_NUMBER() OVER (ORDER BY s.points DESC) AS Rank, s.name, s.points FROM enrollments e JOIN users s ON e.student_id = s.id WHERE e.course_id = ?",
+    [courseId]
   );
   return rows;
 };
