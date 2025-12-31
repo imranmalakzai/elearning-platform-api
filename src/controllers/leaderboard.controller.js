@@ -3,7 +3,7 @@ import {
   course as courseLb,
   globlal,
 } from "../repository/leaderboard.repository.js";
-import { getCourse } from "../controllers/course.controller.js";
+import { getCourseById } from "../repository/courses.repository.js";
 import ApiError from "../utils/api_error.js";
 import { isEnrolled } from "../repository/enrollments.repository.js";
 
@@ -16,9 +16,8 @@ export const globalRanking = asyncHandler(async (req, res) => {
 //**Ranking in a course */
 export const courseRanking = asyncHandler(async (req, res) => {
   const { courseId } = req.params;
-
   //course exist
-  const course = await getCourse(courseId);
+  const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 400);
 
   // user && owner
