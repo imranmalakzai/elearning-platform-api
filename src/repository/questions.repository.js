@@ -78,7 +78,7 @@ export const correctAnswer = async (quesion_id) => {
 //**Get all correct question of a quizz */
 export const correctAnswers = async (quiz_id) => {
   const [rows] = await pool.query(
-    "SELECT correct_option FROM questions WHERE quiz_id = ?",
+    "SELECT id, correct_option FROM questions WHERE quiz_id = ?",
     [quiz_id]
   );
   return rows;
