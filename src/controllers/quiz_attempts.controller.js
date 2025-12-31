@@ -7,14 +7,18 @@ import {
   attemptQuizAndUpdateUserPoints,
   userQuizzAtempt,
 } from "../repository/quiz_attempts.repository.js";
-import { updatePoints } from "../repository/users.repository.js";
+import { getCourseById } from "../repository/courses.repository.js";
 
 export const attemptQuiz = asyncHandler(async (req, res) => {
-  const { quiz_id } = req.params;
+  const { quizId, courseId } = req.params;
   const user_id = req.user.id;
 
+  //course exist
+  const course = await getCourseById(courseId);
+  if (!course) throw new ApiError("course not exist", 404);
+
   //  Quiz check
-  const quiz = await getQuizeById(quiz_id);
+  const quiz = await getQuizeById(quizId);
   if (!quiz) throw new ApiError("Quiz not found", 404);
 
   //  Enrollment check
@@ -22,19 +26,21 @@ export const attemptQuiz = asyncHandler(async (req, res) => {
   if (!enrolled) throw new ApiError("Enroll first", 403);
 
   //  Prevent re-attempt
-  const alreadyAttempted = await userQuizzAtempt(quiz_id, user_id);
+  const alreadyAttempted = await userQuizzAtempt(quizId, user_id);
   if (alreadyAttempted) {
     throw new ApiError("Quiz already attempted", 409);
   }
 
   //  Validate answers
   const { answers } = req.body;
+
   if (!Array.isArray(answers) || answers.length === 0) {
     throw new ApiError("Please provide answers", 400);
   }
 
   //  Fetch correct options
-  const correctOptions = await correctAnswers(quiz_id);
+  const correctOptions = await correctAnswers(quizId);
+
   if (correctOptions.length === 0) {
     throw new ApiError("Quiz has no questions", 400);
   }
@@ -46,7 +52,7 @@ export const attemptQuiz = asyncHandler(async (req, res) => {
     const q = correctOptions.find((q) => q.id === A.question_id);
     if (!q) continue;
 
-    if (q.correct_option === A.selected_option) {
+    if (q.correct_option.toLowerCase() === A.selected_option.toLowerCase()) {
       correctAns++;
     }
   }
@@ -57,7 +63,7 @@ export const attemptQuiz = asyncHandler(async (req, res) => {
   // Save attempt
   const result = await attemptQuizAndUpdateUserPoints({
     user_id,
-    quiz_id,
+    quiz_id: quizId,
     score,
   });
 
