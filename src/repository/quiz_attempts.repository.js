@@ -13,7 +13,7 @@ export const createQuizeAttempts = async (data) => {
 //**Update Quize Attempt of a user*/
 export const updateQuizeAttempts = async (data, id) => {
   const result = await pool.query(
-    "UPDATE quize_attempts SET user_id = ? , quiz_id = ? WHERE id = ? ",
+    "UPDATE quiz_attempts SET user_id = ? , quiz_id = ? WHERE id = ? ",
     [data.user_id, data.quiz_id, id]
   );
   return result.affectedRows;
@@ -38,7 +38,7 @@ export const userQuizAttempts = async (id) => {
 //**Get a user quiz attempt */
 export const userQuizzAtempt = async (quiz_id, user_id) => {
   const [rows] = await pool.query(
-    "SELECT * FROM quizz_attempts WHERE quiz_id = ? AND user_id = ?",
+    "SELECT * FROM quiz_attempts WHERE quiz_id = ? AND student_id = ?",
     [quiz_id, user_id]
   );
   return rows[0];
@@ -56,7 +56,7 @@ export const attemptQuizAndUpdateUserPoints = async ({
 
     // Save quiz attempt
     await connection.query(
-      "INSERT INTO quiz_attempts(user_id, quiz_id, score) VALUES (?, ?, ?)",
+      "INSERT INTO quiz_attempts(student_id, quiz_id, score) VALUES (?, ?, ?)",
       [user_id, quiz_id, score]
     );
 
