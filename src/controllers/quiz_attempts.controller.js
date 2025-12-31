@@ -67,7 +67,7 @@ export const attemptQuiz = asyncHandler(async (req, res) => {
     score,
   });
 
-  if (!result) throw new ApiError("Internal server error", 500);
+  if (result === 0) throw new ApiError("Internal server error", 500);
 
   //  Response
   res.status(201).json({
