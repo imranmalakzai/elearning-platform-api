@@ -5,6 +5,6 @@ import { attemptQuiz } from "../controllers/quiz_attempts.controller.js";
 const quizAttemptRouter = e.Router({ mergeParams: true });
 quizAttemptRouter.use(auth);
 
-quizAttemptRouter.route("/attempt").post(attemptQuiz);
+quizAttemptRouter.route("/").post(attemptQuiz);
 
 export default quizAttemptRouter;
