@@ -2,7 +2,11 @@ import express from "express";
 import { auth } from "../middlewares/auth.middleware.js";
 import { allowRoles } from "../middlewares/allowed_roles.middleware.js";
 import { validate } from "../middlewares/validate.mddleware.js";
-import { registerSchema } from "../validation/users.schema.js";
+import {
+  changePasswordSchema,
+  loginShema,
+  registerSchema,
+} from "../validation/users.schema.js";
 
 // controllers
 import {
@@ -23,13 +27,18 @@ const userRouter = express.Router();
 
 /* ================= AUTH ================= */
 userRouter.post("/auth/register", validate(registerSchema), register);
-userRouter.post("/auth/login", login);
+userRouter.post("/auth/login", validate(loginShema), login);
 
 /* ================= USER (SELF) ================= */
 userRouter.get("/users/me", auth, userProfile);
 userRouter.put("/users/me", auth, updateProfile);
 userRouter.delete("/users/me", auth, deleteAccount);
-userRouter.patch("/users/me/password", auth, changePasswordController);
+userRouter.patch(
+  "/users/me/password",
+  auth,
+  validate(changePasswordSchema),
+  changePasswordController
+);
 
 /* ================= INSTRUCTORS ================= */
 userRouter.get("/instructors/:instructorId/courses", getInstructorCourses);
