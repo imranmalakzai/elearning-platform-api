@@ -18,5 +18,15 @@ export const loginShema = z.object({
     .string()
     .min(6, "password must be more then 6 characters")
     .max(15, "password must not be more then 15 characters"),
-  s,
+});
+
+export const changePasswordSchema = z.object({
+  oldPassword: z
+    .string()
+    .min(6, "password must be more then 6 characters")
+    .max(15, "password must not be more then 15 characters"),
+  newPassword: z
+    .string()
+    .min(6, "password must be more then 6 characters")
+    .max(15, "password must not be more then 15 characters"),
 });
