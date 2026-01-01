@@ -1,6 +1,8 @@
 import express from "express";
 import { auth } from "../middlewares/auth.middleware.js";
 import { allowRoles } from "../middlewares/allowed_roles.middleware.js";
+import { validate } from "../middlewares/validate.mddleware.js";
+import { registerSchema } from "../validation/users.schema.js";
 
 // controllers
 import {
@@ -20,7 +22,7 @@ import { getInstructorCourses } from "../controllers/course.controller.js";
 const userRouter = express.Router();
 
 /* ================= AUTH ================= */
-userRouter.post("/auth/register", register);
+userRouter.post("/auth/register", validate(registerSchema), register);
 userRouter.post("/auth/login", login);
 
 /* ================= USER (SELF) ================= */
