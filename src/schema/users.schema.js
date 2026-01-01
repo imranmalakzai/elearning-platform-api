@@ -1,4 +1,5 @@
 import { email, z } from "zod";
+import { Roles } from "../utils/role";
 
 export const registerSchema = z.object({
   name: z
@@ -29,4 +30,12 @@ export const changePasswordSchema = z.object({
     .string()
     .min(6, "password must be more then 6 characters")
     .max(15, "password must not be more then 15 characters"),
+});
+
+export const roleSchema = z.object({
+  role: z
+    .enum(["admin", "instructor", "student"])
+    .refine((val) => Roles.includes(val), {
+      message: "Invalid role please select student || instructor || admin",
+    }),
 });
