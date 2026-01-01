@@ -1,28 +1,38 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
-export const swaggerSpec = swaggerJSDoc({
+const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "E-learning management API",
+      title: "E-Learning Platform API",
       version: "1.0.0",
-      description: "API documentation for e-learrning management system",
+      description:
+        "REST API for an E-Learning Platform with authentication, courses, lessons, quizzes, and roles",
+      contact: {
+        name: "Imran Malakzai",
+      },
     },
     servers: [
       {
-        url: "http://localhost:5000/api",
+        url: "http://localhost:5000/api/",
       },
     ],
     components: {
       securitySchemes: {
-        bearerAuth: {
+        BearerAuth: {
           type: "http",
           scheme: "bearer",
           bearerFormat: "JWT",
         },
       },
     },
-    security: [{ bearerAuth: [] }],
+    security: [
+      {
+        BearerAuth: [],
+      },
+    ],
   },
-  apis: ["./src/routes/*.js"], // where comments are
-});
+  apis: ["./src/routes/**/*.js"], // 👈 very important
+};
+
+export const swaggerSpec = swaggerJSDoc(options);
