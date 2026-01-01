@@ -11,3 +11,12 @@ export const registerSchema = z.object({
     .min(6, "password must be more then 6 characters")
     .max(15, "password must not be more then 15 characters"),
 });
+
+export const loginShema = z.object({
+  email: z.string().email("Invalid emaill address"),
+  password: z
+    .string()
+    .min(6, "password must be more then 6 characters")
+    .max(15, "password must not be more then 15 characters"),
+  s,
+});
