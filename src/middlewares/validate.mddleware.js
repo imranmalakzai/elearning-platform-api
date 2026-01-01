@@ -11,8 +11,8 @@ export const validate = (schema, property = "body") => {
       }));
 
       return res.status(400).json({
-        message: "Validation failed",
-        errors: errors || [],
+        success: false,
+        message: errors[0].message || "validation error",
       });
     }
   };
