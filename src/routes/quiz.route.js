@@ -18,12 +18,8 @@ const quizzRouter = express.Router({ mergeParams: true });
 quizzRouter.use(auth);
 
 quizzRouter.route("/").get(quizzes);
-quizzRouter
-  .route("/")
-  .post(allowRoles("instructor"), validate(createLessonSchema), createQuizz);
-quizzRouter
-  .route("/:quizId")
-  .patch(allowRoles("instructor"), validate(updateLessonSchema), updateQuizz);
+quizzRouter.route("/").post(allowRoles("instructor"), createQuizz);
+quizzRouter.route("/:quizId").patch(allowRoles("instructor"), updateQuizz);
 quizzRouter.route("/:quizId").delete(allowRoles("instructor"), delteQuizz);
 quizzRouter.route("/:quizId").get(quizz);
 
