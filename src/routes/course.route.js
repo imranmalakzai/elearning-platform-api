@@ -1,6 +1,13 @@
 import express from "express";
 import { auth } from "../middlewares/auth.middleware.js";
 import { allowRoles } from "../middlewares/allowed_roles.middleware.js";
+import { validate } from "../middlewares/validate.mddleware.js";
+
+//validation
+import {
+  createCourseShema,
+  updateCourseShema,
+} from "../validation/course.schema.js";
 
 // child routers
 import lessonRouter from "./lesson.route.js";
@@ -36,9 +43,21 @@ courseRouter.get("/:courseId", getCourse);
  * INSTRUCTOR / ADMIN
  * ======================
  */
-courseRouter.post("/", auth, allowRoles("instructor"), createCourseController);
+courseRouter.post(
+  "/",
+  auth,
+  validate(createCourseShema),
+  allowRoles("instructor"),
+  createCourseController
+);
 
-courseRouter.put("/:courseId", auth, allowRoles("instructor"), updateCourse);
+courseRouter.put(
+  "/:courseId",
+  auth,
+  validate(updateCourseShema),
+  allowRoles("instructor"),
+  updateCourse
+);
 
 courseRouter.delete(
   "/:courseId",
