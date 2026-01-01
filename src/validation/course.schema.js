@@ -21,10 +21,3 @@ export const updateCourseShema = z.object({
     .min(50, "course description must be at least 50 characters")
     .max(1000, "course description must not be more then 1000 characters"),
 });
-
-export const courseIdSchema = z.object({
-  courseId: z
-    .number("Invalid course id")
-    .int()
-    .positive("please provide positive number"),
-});

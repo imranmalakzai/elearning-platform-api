@@ -14,7 +14,7 @@ export const createLessonSchema = z.object({
   lesson_order: z
     .number()
     .int("please provide number only")
-    .maxValue(3, "please provide valid lesson order"),
+    .positive("please provide valid lesson order"),
 });
 
 export const updateLessonSchema = z.object({
@@ -30,5 +30,5 @@ export const updateLessonSchema = z.object({
   lesson_order: z
     .number()
     .int("please provide number only")
-    .maxValue(3, "please provide valid lesson order"),
+    .positive("please provide valid lesson order"),
 });
