@@ -1,5 +1,5 @@
 import { email, z } from "zod";
-import { Roles } from "../utils/role";
+import { Roles } from "../utils/role.js";
 
 export const registerSchema = z.object({
   name: z
