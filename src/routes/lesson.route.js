@@ -1,6 +1,11 @@
 import express from "express";
 import { auth } from "../middlewares/auth.middleware.js";
 import { allowRoles } from "../middlewares/allowed_roles.middleware.js";
+import { validate } from "../middlewares/validate.mddleware.js";
+import {
+  createLessonSchema,
+  updateLessonSchema,
+} from "../validation/lesson.schema.js";
 
 // controllers
 import {
@@ -26,9 +31,21 @@ lessonRouter.get("/:lessonId", auth, getLesson);
  * INSTRUCTOR ONLY
  * ======================
  */
-lessonRouter.post("/", auth, allowRoles("instructor"), createLesson);
+lessonRouter.post(
+  "/",
+  auth,
+  validate(createLessonSchema),
+  allowRoles("instructor"),
+  createLesson
+);
 
-lessonRouter.put("/:lessonId", auth, allowRoles("instructor"), updateLesson);
+lessonRouter.put(
+  "/:lessonId",
+  auth,
+  validate(updateLessonSchema),
+  allowRoles("instructor"),
+  updateLesson
+);
 
 lessonRouter.delete(
   "/:lessonId",
