@@ -41,7 +41,6 @@ export const updateQuizz = asyncHandler(async (req, res) => {
   //couse exist ?
   const course = await getCourseById(courseId);
   if (!course) throw new ApiError("course not exist", 404);
-  console.log(course);
   //is owner of the course
   const owner = course.instructor_id.toString() === req.user.id.toString();
   if (!owner) throw new ApiError("Access denied", 403);
