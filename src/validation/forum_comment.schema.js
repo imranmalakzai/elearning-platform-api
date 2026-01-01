@@ -5,3 +5,9 @@ export const commentSchmea = z.object({
     .string()
     .max(500, "comment lenght should not be more then 500 character"),
 });
+
+export const updateCommentSchma = z.object({
+  content: z
+    .string()
+    .max(500, "comment lenght should not be more then 500 character"),
+});
