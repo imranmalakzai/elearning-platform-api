@@ -210,7 +210,12 @@ userRouter.patch(
  *       200:
  *         description: Instructor courses list
  */
-userRouter.get("/instructors/:instructorId/courses", getInstructorCourses);
+userRouter.get(
+  "/instructors/:instructorId/courses",
+  auth,
+  allowRoles("instructor"),
+  getInstructorCourses
+);
 
 /* ================= ADMIN ================= */
 /**
@@ -238,7 +243,7 @@ userRouter.get("/instructors/:instructorId/courses", getInstructorCourses);
  *       200:
  *         description: Users fetched
  */
-userRouter.get("/admin/users", getUserByRoles);
+userRouter.get("/admin/users", auth, allowRoles("admin"), getUserByRoles);
 
 /**
  * @swagger
@@ -258,7 +263,7 @@ userRouter.get("/admin/users", getUserByRoles);
  *       200:
  *         description: User data
  */
-userRouter.get("/admin/users/:id", userById);
+userRouter.get("/admin/users/:id", auth, allowRoles("admin"), userById);
 
 /**
  * @swagger
@@ -283,6 +288,11 @@ userRouter.get("/admin/users/:id", userById);
  *       200:
  *         description: Role updated
  */
-userRouter.patch("/admin/users/:id/role", changeRoleController);
+userRouter.patch(
+  "/admin/users/:id/role",
+  auth,
+  allowRoles("admin"),
+  changeRoleController
+);
 
 export default userRouter;
