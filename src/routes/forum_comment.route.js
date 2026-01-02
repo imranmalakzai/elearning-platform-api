@@ -15,20 +15,44 @@ import {
 
 const commentRouter = express.Router({ mergeParams: true });
 commentRouter.use(auth);
+
 /**
  * @swagger
- * /comments:
+ * tags:
+ *   name: Forum Comments
+ *   description: Comments on forum posts
+ */
+
+/**
+ * @swagger
+ * /courses/{courseId}/forums/{postId}/comments:
  *   post:
  *     summary: Create a comment on a forum post
  *     tags: [Forum Comments]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ForumCommentCreate'
+ *             type: object
+ *             required: [content]
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 example: This post helped me a lot.
  *     responses:
  *       201:
  *         description: Comment created successfully
@@ -37,33 +61,54 @@ commentRouter.use(auth);
  *       401:
  *         description: Unauthorized
  */
-
 commentRouter.route("/").post(validate(commentSchmea), postComment);
+
 /**
  * @swagger
- * /comments:
+ * /courses/{courseId}/forums/{postId}/comments:
  *   get:
- *     summary: Get all comments for a forum post
+ *     summary: Get all comments of a forum post
  *     tags: [Forum Comments]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: List of comments
  *       401:
  *         description: Unauthorized
  */
-
 commentRouter.route("/").get(forumPostComments);
+
 /**
  * @swagger
- * /comments/{commentId}:
+ * /courses/{courseId}/forums/{postId}/comments/{commentId}:
  *   get:
  *     summary: Get a comment by ID
  *     tags: [Forum Comments]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: commentId
  *         required: true
@@ -71,23 +116,31 @@ commentRouter.route("/").get(forumPostComments);
  *           type: integer
  *     responses:
  *       200:
- *         description: Comment data
+ *         description: Comment fetched successfully
  *       404:
  *         description: Comment not found
- *       401:
- *         description: Unauthorized
  */
-
 commentRouter.route("/:commentId").get(getCommentById);
+
 /**
  * @swagger
- * /comments/{commentId}:
+ * /courses/{courseId}/forums/{postId}/comments/{commentId}:
  *   patch:
  *     summary: Update a forum comment
  *     tags: [Forum Comments]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: commentId
  *         required: true
@@ -98,31 +151,43 @@ commentRouter.route("/:commentId").get(getCommentById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ForumCommentUpdate'
+ *             type: object
+ *             required: [content]
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 example: Updated comment text
  *     responses:
  *       200:
  *         description: Comment updated successfully
  *       400:
  *         description: Validation error
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Comment not found
  */
-
 commentRouter
   .route("/:commentId")
   .patch(validate(updateCommentSchma), editComment);
 
 /**
  * @swagger
- * /comments/{commentId}:
+ * /courses/{courseId}/forums/{postId}/comments/{commentId}:
  *   delete:
  *     summary: Delete a forum comment
  *     tags: [Forum Comments]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *       - in: path
+ *         name: postId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: commentId
  *         required: true
@@ -131,12 +196,9 @@ commentRouter
  *     responses:
  *       200:
  *         description: Comment deleted successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Comment not found
  */
-
 commentRouter.route("/:commentId").delete(deleteComment);
 
 export default commentRouter;
