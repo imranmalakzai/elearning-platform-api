@@ -10,6 +10,7 @@ import {
 } from "../controllers/badge.controller.js";
 
 const badgeRouter = express.Router();
+badgeRouter.use(auth, allowRoles("admin"));
 
 /**
  * @swagger
@@ -54,7 +55,7 @@ badgeRouter.route("/").get(badges);
  *               description:
  *                 type: string
  *                 example: "Awarded for completing all tasks with excellence"
- *               required_points:
+ *               points_required:
  *                 type: integer
  *                 example: 100
  *     responses:
@@ -114,7 +115,7 @@ badgeRouter.route("/:badgeId").get(badge);
  *               description:
  *                 type: string
  *                 example: "Updated description"
- *               required_points:
+ *               points_required:
  *                 type: integer
  *                 example: 150
  *     responses:
