@@ -21,7 +21,7 @@ forumPostRouter.use(auth);
  * @swagger
  * tags:
  *   name: Forum Posts
- *   description: Forum posts under a course
+ *   description: Forum posts under a course (enrolled student only)
  */
 
 /**
@@ -85,7 +85,7 @@ forumPostRouter.route("/").get(forumPosts);
  * @swagger
  * /courses/{courseId}/forums/{postId}:
  *   delete:
- *     summary: Delete a forum post
+ *     summary: Delete a forum post (owner && instructor only)
  *     tags: [Forum Posts]
  *     security:
  *       - BearerAuth: []
@@ -114,7 +114,7 @@ forumPostRouter.route("/:postId").delete(deletePost);
  * @swagger
  * /courses/{courseId}/forums/{postId}:
  *   patch:
- *     summary: Update a forum post
+ *     summary: Update a forum post (owner only)
  *     tags: [Forum Posts]
  *     security:
  *       - BearerAuth: []
