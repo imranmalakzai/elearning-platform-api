@@ -16,7 +16,7 @@ leaderboardRouter.use(auth);
 
 /**
  * @swagger
- * /leaderboard/global:
+ * /leaderboards/global:
  *   get:
  *     summary: Get global leaderboard
  *     tags: [Leaderboard]
@@ -46,7 +46,7 @@ leaderboardRouter.route("/global").get(globalRanking);
 
 /**
  * @swagger
- * /leaderboard/{courseId}:
+ * /leaderboards/{courseId}:
  *   get:
  *     summary: Get leaderboard for a specific course
  *     tags: [Leaderboard]
