@@ -20,7 +20,7 @@ enrollmentRouter.use(auth);
 
 /**
  * @swagger
- * /api/courses/{courseId}/enroll:
+ * /courses/{courseId}/enroll:
  *   post:
  *     summary: Enroll authenticated user into a course
  *     tags: [Enrollments]
@@ -44,7 +44,7 @@ enrollmentRouter.route("/").post(enrollToACourse);
 
 /**
  * @swagger
- * /api/courses/{courseId}/enroll:
+ * /courses/{courseId}/enroll:
  *   delete:
  *     summary: Cancel enrollment from a course
  *     tags: [Enrollments]
@@ -68,9 +68,9 @@ enrollmentRouter.route("/").delete(cancellEnrollment);
 
 /**
  * @swagger
- * /api/courses/{courseId}/enroll:
+ * /courses/{courseId}/enroll:
  *   get:
- *     summary: Get all students enrolled in a course
+ *     summary: Get all students enrolled in a course (instructor only)
  *     tags: [Enrollments]
  *     security:
  *       - BearerAuth: []
