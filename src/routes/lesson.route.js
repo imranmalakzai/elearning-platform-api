@@ -125,7 +125,7 @@ lessonRouter.get("/:lessonId", auth, getLesson);
  * @swagger
  * /courses/{courseId}/lessons:
  *   post:
- *     summary: Create a new lesson
+ *     summary: Create a new lesson (instructor only)
  *     tags: [Lessons]
  *     security:
  *       - BearerAuth: []
@@ -180,7 +180,7 @@ lessonRouter.post(
  * @swagger
  * /courses/{courseId}/lessons/{lessonId}:
  *   put:
- *     summary: Update a lesson
+ *     summary: Update a lesson (instructor only | owner)
  *     tags: [Lessons]
  *     security:
  *       - BearerAuth: []
@@ -230,7 +230,7 @@ lessonRouter.put(
  * @swagger
  * /courses/{courseId}/lessons/{lessonId}:
  *   delete:
- *     summary: Delete a lesson
+ *     summary: Delete a lesson (instructor only | owner)
  *     tags: [Lessons]
  *     security:
  *       - BearerAuth: []
