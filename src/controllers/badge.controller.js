@@ -28,12 +28,12 @@ export const updateBadge = asyncHandler(async (req, res) => {
   const { name, description, points_required } = req.body;
 
   if (!name || !description || !points_required) {
-    throw new ApiError("All fileds are required");
+    throw new ApiError("All fileds are required", 400);
   }
 
   //badge exist
   const badge = await badgeById(badgeId);
-  if (!badge) throw new ApiError("Badge not exist");
+  if (!badge) throw new ApiError("Badge not exist", 404);
 
   //badge
   const result = await updateBadgeRepo(
