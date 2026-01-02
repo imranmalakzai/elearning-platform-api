@@ -16,20 +16,39 @@ import { validate } from "../middlewares/validate.mddleware.js";
 const forumPostRouter = express.Router({ mergeParams: true });
 
 forumPostRouter.use(auth);
+
 /**
  * @swagger
- * /forums:
+ * tags:
+ *   name: Forum Posts
+ *   description: Forum posts under a course
+ */
+
+/**
+ * @swagger
+ * /courses/{courseId}/forums:
  *   post:
  *     summary: Create a forum post
  *     tags: [Forum Posts]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ForumPostCreate'
+ *             type: object
+ *             required: [content]
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 example: This course is really helpful.
  *     responses:
  *       201:
  *         description: Forum post created successfully
@@ -38,33 +57,44 @@ forumPostRouter.use(auth);
  *       401:
  *         description: Unauthorized
  */
-
 forumPostRouter.route("/").post(validate(createPostShema), createForumPost);
+
 /**
  * @swagger
- * /forums:
+ * /courses/{courseId}/forums:
  *   get:
- *     summary: Get all forum posts
+ *     summary: Get all forum posts of a course
  *     tags: [Forum Posts]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: List of forum posts
  *       401:
  *         description: Unauthorized
  */
-
 forumPostRouter.route("/").get(forumPosts);
+
 /**
  * @swagger
- * /forums/{postId}:
+ * /courses/{courseId}/forums/{postId}:
  *   delete:
  *     summary: Delete a forum post
  *     tags: [Forum Posts]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: postId
  *         required: true
@@ -78,18 +108,22 @@ forumPostRouter.route("/").get(forumPosts);
  *       404:
  *         description: Post not found
  */
-
 forumPostRouter.route("/:postId").delete(deletePost);
 
 /**
  * @swagger
- * /forums/{postId}:
+ * /courses/{courseId}/forums/{postId}:
  *   patch:
  *     summary: Update a forum post
  *     tags: [Forum Posts]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: postId
  *         required: true
@@ -100,7 +134,12 @@ forumPostRouter.route("/:postId").delete(deletePost);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ForumPostUpdate'
+ *             type: object
+ *             required: [content]
+ *             properties:
+ *               content:
+ *                 type: string
+ *                 example: Updated forum post content
  *     responses:
  *       200:
  *         description: Forum post updated successfully
@@ -111,19 +150,24 @@ forumPostRouter.route("/:postId").delete(deletePost);
  *       404:
  *         description: Post not found
  */
-
 forumPostRouter
   .route("/:postId")
   .patch(validate(updatePostShema), updateForumPost);
+
 /**
  * @swagger
- * /forums/{postId}:
+ * /courses/{courseId}/forums/{postId}:
  *   get:
  *     summary: Get a forum post by ID
  *     tags: [Forum Posts]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: integer
  *       - in: path
  *         name: postId
  *         required: true
@@ -131,13 +175,12 @@ forumPostRouter
  *           type: integer
  *     responses:
  *       200:
- *         description: Forum post data
+ *         description: Forum post fetched successfully
  *       404:
  *         description: Post not found
  *       401:
  *         description: Unauthorized
  */
-
 forumPostRouter.route("/:postId").get(getPostById);
 
 export default forumPostRouter;
