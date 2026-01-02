@@ -6,6 +6,7 @@ import {
 } from "../controllers/lessons_progress.controller.js";
 
 const lessonProgressRouter = express.Router({ mergeParams: true });
+lessonProgressRouter.use(auth);
 
 /**
  * @swagger
