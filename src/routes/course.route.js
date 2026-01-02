@@ -73,7 +73,7 @@ courseRouter.get("/:courseId", getCourse);
  * @swagger
  * /courses:
  *   post:
- *     summary: Create a new course
+ *     summary: Create a new course(instructor only)
  *     tags: [Courses]
  *     security:
  *       - BearerAuth: []
@@ -109,7 +109,7 @@ courseRouter.post(
  * @swagger
  * /courses/{courseId}:
  *   put:
- *     summary: Update a course
+ *     summary: Update a course (instructor only)
  *     tags: [Courses]
  *     security:
  *       - BearerAuth: []
@@ -153,7 +153,7 @@ courseRouter.put(
  * @swagger
  * /courses/{courseId}:
  *   delete:
- *     summary: Delete a course
+ *     summary: Delete a course (instructor only)
  *     tags: [Courses]
  *     security:
  *       - BearerAuth: []
