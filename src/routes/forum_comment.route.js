@@ -20,7 +20,7 @@ commentRouter.use(auth);
  * @swagger
  * tags:
  *   name: Forum Comments
- *   description: Comments on forum posts
+ *   description: Comments on forum posts (enroll student && instructor only)
  */
 
 /**
@@ -173,7 +173,7 @@ commentRouter
  * @swagger
  * /courses/{courseId}/forums/{postId}/comments/{commentId}:
  *   delete:
- *     summary: Delete a forum comment
+ *     summary: Delete a forum comment (owner && post owner)
  *     tags: [Forum Comments]
  *     security:
  *       - BearerAuth: []
