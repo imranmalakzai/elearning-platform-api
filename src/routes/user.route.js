@@ -133,7 +133,7 @@ userRouter.get("/users/me", auth, userProfile);
  *             properties:
  *               name:
  *                 type: string
- *               avatar:
+ *               email:
  *                 type: string
  *     responses:
  *       200:
