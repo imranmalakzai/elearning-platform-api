@@ -8,6 +8,7 @@ import {
   updateCouseDetails,
   instructorCourses,
 } from "../repository/courses.repository.js";
+import { getUserById } from "../repository/users.repository.js";
 
 //**create A course (Instructor only) */
 export const createCourseController = asyncHandler(async (req, res) => {
@@ -73,6 +74,10 @@ export const getCourse = asyncHandler(async (req, res) => {
 
 //**Instructor courses */
 export const getInstructorCourses = asyncHandler(async (req, res) => {
+  const user = await getUserById(req.user.id);
+  if (user.role !== "instructor")
+    throw new ApiError("user is not on instructor", 404);
   const courses = await instructorCourses(req.params.id);
+  if (!courses) throw new ApiError("instructor not have any course", 404);
   res.status(200).json({ courses });
 });
