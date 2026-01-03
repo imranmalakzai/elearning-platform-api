@@ -27,6 +27,11 @@ app.use("/api/courses/", courseRouter);
 app.use("/api/badges/", badgeRouter);
 app.use("/api/leaderboards/", leaderboardRouter);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+//  Swagger JSON
+app.get("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
 
 //**health end point */
 app.get("/", (req, res) => {
