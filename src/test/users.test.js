@@ -3,6 +3,7 @@ import app from "../app.js";
 
 import request from "supertest";
 
+//**Auth route endpoints loign/register */
 describe("AUTH API", () => {
   test("Login returns JWT token", async () => {
     const res = await request(app).post("/api/auth/login").send({
@@ -19,5 +20,26 @@ describe("AUTH API", () => {
       password: "super_secret_key",
     });
     expect(res.statusCode).toBe(400);
+  });
+});
+
+//**Admin only route endpoints automated testing */
+describe("Users API", () => {
+  let token;
+  beforeAll(async () => (token = await AdminToken()));
+
+  //test get user without admin token
+  test("Get users without admin token retun statusCode 401", async () => {
+    const res = await request(app).get("/api/admin/users");
+    expect(res.statusCode).toBe(401);
+    expect(res.body.success).toBe(false);
+  });
+
+  //get user with admin token
+  test("Get users with admin token retun status code 200", async () => {
+    const res = await request(app)
+      .get("/api/admin/users")
+      .set(`Authorization`, ` Bearer ${token}`);
+    expect(res.statusCode).toBe(200);
   });
 });
