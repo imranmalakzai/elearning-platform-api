@@ -66,6 +66,7 @@ Execute the elerning-platefrom SQL file located in the schema folder.
 
 ```
 npm run start
+npm run test // for automated testing suing jest and super test
 ```
 
 The API will be available at `http://localhost:5000/api`.
