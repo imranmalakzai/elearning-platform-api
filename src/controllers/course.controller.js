@@ -41,6 +41,8 @@ export const updateCourse = asyncHandler(async (req, res) => {
   }
   const result = await updateCouseDetails({ title, description }, courseId);
   if (result === 0) throw new ApiError("Internal server error", 500);
+
+  await redis.del("cache:courses:list");
   res.status(200).json({ message: "course updated successfully" });
 });
 
