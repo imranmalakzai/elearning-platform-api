@@ -1,4 +1,5 @@
 import asyncHandler from "../utils/async_handler.js";
+import redis from "../config/redis.config.js";
 import ApiError from "../utils/api_error.js";
 import {
   createCourse,
@@ -61,7 +62,16 @@ export const deleteCourseController = asyncHandler(async (req, res) => {
 
 //**GET ALL COURSES */
 export const coursesController = asyncHandler(async (req, res) => {
+  //check cache for course
+  const cache = await redis.get("cache:courses:list");
+
+  if (cache) {
+    return res.status(200).json({ courses: JSON.parse(cache) });
+  }
   const course = await courses();
+
+  await redis.set("cache:courses:list", JSON.stringify(course), { EX: 600 });
+
   res.status(200).json({ courses: course });
 });
 
