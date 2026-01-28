@@ -22,6 +22,7 @@ export const createCourseController = asyncHandler(async (req, res) => {
     instructor_id: req.user.id,
   });
   if (course === 0) throw new ApiError("internal server error", 500);
+  await redis.del("cache:courses:list");
   res.status(201).json({ message: "course created successfully" });
 });
 
