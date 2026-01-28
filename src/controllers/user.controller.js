@@ -2,6 +2,7 @@ import ApiError from "../utils/api_error.js";
 import asyncHandler from "../utils/async_handler.js";
 import bcrypt from "bcrypt";
 import { Roles } from "../utils/role.js";
+import redis from "../config/redis.config.js";
 import {
   usersByrole,
   createUser,
@@ -41,17 +42,25 @@ export const register = asyncHandler(async (req, res) => {
 //**Login existing user */
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new ApiError("email and password is required", 409);
-  }
+
+  //use exist
   const user = await getUserByEmail(email);
-  if (!user) {
-    throw new ApiError("invalid email or password", 401);
+  const key = `Login_attempts : ${email}`;
+
+  //check attempt in redis
+  const attempts = await redis.get(key);
+
+  if (attempts >= 5) {
+    throw new ApiError("To many request please retry after 10 minutes", 429);
   }
+
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
+    await redis.incr(key);
+    await redis.expire(key, 600);
     throw new ApiError("invalid email or password", 401);
   }
+  await redis.del(key);
   const token = await generateToken(user);
   res.status(200).json({ token, user });
 });
