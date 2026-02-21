@@ -1,4 +1,4 @@
-# E-Learning Platform API
+## E-Learning Platform API
 
 A production-ready RESTful API built with **Node.js**, **Express**, and **MySQL** for managing a full-featured e-learning platform. The system enables instructors to create and manage courses, lessons, quizzes, and assessments, while students can enroll in courses, track progress, participate in discussions, and earn badges through gamification.
 
