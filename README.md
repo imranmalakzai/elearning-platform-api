@@ -31,6 +31,7 @@ The API follows a modular, scalable architecture with robust authentication, aut
 - **Validation:** Zod
 - **Testing:** Jest, Supertest
 - **Documentation:** Swagger (OpenAPI)
+- **Caching:** Redis
 
 ---
 
@@ -39,6 +40,7 @@ The API follows a modular, scalable architecture with robust authentication, aut
 - Node.js v18 or higher
 - MySQL or MariaDB v10 or higher
 - npm (comes with Node.js)
+- Redis server
 
 ---
 
@@ -71,6 +73,8 @@ DB_NAME=elearning_db
 
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=7d
+
+REDIS_CLIENT_URL= "redis://127.0.0.1:6379"
 ```
 
 ### 4. Database Setup
